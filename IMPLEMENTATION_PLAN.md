@@ -1,379 +1,863 @@
 # FastReader Implementation Plan
 
-**Generated:** 2026-01-16
-**Status:** Planning Complete - Ready for Building Loop
-**MVP Goal:** RSVP + OVP speed reader (50-350 WPM) with TXT/PDF/EPUB/DOCX support
+## Project Status Summary
+
+**Current Completion: ~18%**
+
+The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The application has proper state management and conditional rendering, ready for component implementation.
+
+**Next Milestone:** Build MVP Reading Experience (Phases 1-3)
+- Implement core RSVP display with working React components
+- Add file upload and basic parsing
+- Create functional speed controls
+
+**Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
 
 ---
 
-## Current State
+## Completed Work ✅
 
-**Implemented:**
-- ✅ Project infrastructure (React + TypeScript + Vite)
-- ✅ Testing setup (Vitest + React Testing Library - 76 tests passing)
-- ✅ Core utilities in `src/lib/`:
-  - `ovp-calculator.ts` - OVP position calculation (tested)
-  - `speed-timer.ts` - WPM/milliseconds conversion (tested)
-  - `text-parser.ts` - Text cleaning and word extraction (tested)
-- ✅ PWA configuration
-- ✅ Git repository initialized
+### Core Utilities Library (`src/lib/`)
+All utilities are production-ready with comprehensive test coverage:
 
-**Missing (Priority Order):**
-All major application components need to be built from scratch.
+1. **OVP Calculator** (`ovp-calculator.ts` + tests)
+   - ✅ `calculateOVP()` - Scientifically-validated position calculation
+   - ✅ `splitWordForOVP()` - Splits word into before/OVP/after segments
+   - ✅ 27 comprehensive test cases covering all word lengths and edge cases
+   - **Spec:** `specs/ovp-highlighting.md`
 
----
+2. **Speed Timer** (`speed-timer.ts` + tests)
+   - ✅ `wpmToMilliseconds()` / `millisecondsToWPM()` - Bidirectional conversion
+   - ✅ `isValidWPM()` / `shouldShowSpeedWarning()` - Validation helpers
+   - ✅ `estimateReadingTime()` / `formatReadingTime()` - Time calculations
+   - ✅ Constants: `MIN_WPM=50`, `MAX_WPM=350`, `WARNING_WPM=300`
+   - ✅ 18 test cases covering all timing scenarios
+   - **Spec:** `specs/speed-controls.md`
 
-## Implementation Tasks (Prioritized)
+3. **Text Parser** (`text-parser.ts` + tests)
+   - ✅ `parseTextToWords()` - Core word extraction with punctuation preservation
+   - ✅ `cleanText()` - Normalization and whitespace handling
+   - ✅ `extractTextFromHTML()` - HTML tag stripping
+   - ✅ `countWords()`, `calculateProgress()`, `progressToIndex()` - Progress utilities
+   - ✅ `validateText()`, `stripPunctuation()` - Text validation helpers
+   - ✅ 15 test cases covering text processing edge cases
+   - **Spec:** `specs/content-parser.md`, `specs/progress-tracking.md`
 
-### Phase 1: Foundation & Core Types (Tasks 1-3)
-
-- **Task 1:** Create TypeScript types and interfaces
-  - Create `src/types/index.ts`
-  - Define: `Document`, `ReadingPosition`, `FileMetadata`, `AppState`
-  - Define props types for all planned components
-  - Export all types for use across app
-  - **Tests:** Type compilation validation
-  - **Priority:** CRITICAL - needed by all components
-
-- **Task 2:** Create document state management
-  - Create `src/hooks/useDocumentState.ts`
-  - Manage: current document, words array, metadata
-  - Handle: document load, clear, update
-  - Use React Context or Zustand for global state
-  - **Tests:** State transitions, document lifecycle
-  - **Depends on:** Task 1 (types)
-  - **Priority:** HIGH - foundation for all features
-
-- **Task 3:** Create reading position state management
-  - Create `src/hooks/useReadingPosition.ts`
-  - Manage: current word index, playback state, speed (WPM)
-  - Handle: play/pause, navigate (prev/next/jump), speed change
-  - **Tests:** Position updates, navigation, speed changes
-  - **Depends on:** Task 1 (types)
-  - **Priority:** HIGH - core RSVP functionality
-
-### Phase 2: File Parsing (Tasks 4-8)
-
-- **Task 4:** Implement TXT file parser
-  - Create `src/lib/parsers/txt-parser.ts`
-  - Use FileReader API to read UTF-8 text
-  - Use existing `text-parser.ts` functions for cleaning/word extraction
-  - Return: word array + metadata (word count, filename)
-  - **Tests:** Various encodings, line endings, empty files
-  - **Depends on:** Task 1 (types)
-  - **Priority:** HIGH - simplest parser, needed for testing
-
-- **Task 5:** Implement PDF file parser
-  - Create `src/lib/parsers/pdf-parser.ts`
-  - Use `pdfjs-dist` library (already installed)
-  - Extract text from all pages in order
-  - Clean and normalize extracted text
-  - **Tests:** Multi-page PDFs, text extraction accuracy
-  - **Depends on:** Task 4 pattern
-  - **Priority:** HIGH - most common format
-
-- **Task 6:** Implement EPUB file parser
-  - Create `src/lib/parsers/epub-parser.ts`
-  - Use `epubjs` library (already installed)
-  - Extract text from all chapters
-  - Strip HTML tags, preserve text content
-  - **Tests:** EPUB 2/3 formats, chapter ordering
-  - **Depends on:** Task 4 pattern
-  - **Priority:** MEDIUM - important but less common
-
-- **Task 7:** Implement DOCX file parser
-  - Create `src/lib/parsers/docx-parser.ts`
-  - Use `mammoth` library (already installed)
-  - Convert to HTML then extract text
-  - Preserve paragraph structure
-  - **Tests:** Various Word documents, formatting edge cases
-  - **Depends on:** Task 4 pattern
-  - **Priority:** MEDIUM - common but after PDF
-
-- **Task 8:** Create unified file parser orchestrator
-  - Create `src/lib/parsers/index.ts`
-  - Validate file type and size (max 50MB)
-  - Route to appropriate parser based on extension
-  - Handle errors gracefully with user-friendly messages
-  - **Tests:** File type routing, validation, error handling
-  - **Depends on:** Tasks 4-7 (all parsers)
-  - **Priority:** HIGH - integration layer
-
-### Phase 3: RSVP Display Component (Tasks 9-11)
-
-- **Task 9:** Create WordDisplay component with OVP highlighting
-  - Create `src/components/WordDisplay.tsx`
-  - Display current word at screen center
-  - Use `splitWordForOVP()` from `src/lib/ovp-calculator.ts`
-  - Apply red highlight to OVP letter
-  - Large font (32-48px), dark background, light text
-  - **Tests:** OVP highlighting position, rendering, styling
-  - **Depends on:** Task 1 (types), Task 3 (position state)
-  - **Priority:** CRITICAL - core visual component
-
-- **Task 10:** Create RSVP playback engine
-  - Create `src/hooks/useRSVPPlayback.ts`
-  - Implement timing loop using `setInterval` or `requestAnimationFrame`
-  - Use `wpmToMilliseconds()` from `src/lib/speed-timer.ts`
-  - Handle: start, stop, pause, resume playback
-  - Maintain accurate timing (±10ms variance)
-  - **Tests:** Timing accuracy, playback control, speed changes
-  - **Depends on:** Task 3 (position state)
-  - **Priority:** CRITICAL - core functionality
-
-- **Task 11:** Create RSVPReader component (main reader view)
-  - Create `src/components/RSVPReader.tsx`
-  - Integrate WordDisplay + playback engine
-  - Show progress indicator
-  - Handle keyboard shortcuts (SPACE, ARROWS, ESC)
-  - **Tests:** Integration, keyboard events, playback flow
-  - **Depends on:** Tasks 9, 10
-  - **Priority:** HIGH - main reading interface
-
-### Phase 4: File Upload & Management (Tasks 12-14)
-
-- **Task 12:** Create FileUpload component
-  - Create `src/components/FileUpload.tsx`
-  - Use `react-dropzone` (already installed)
-  - Accept: .txt, .pdf, .epub, .docx
-  - Drag-and-drop + click to upload
-  - Show loading state during parsing
-  - Display errors with helpful messages
-  - **Tests:** File validation, upload flow, error states
-  - **Depends on:** Task 8 (parser orchestrator), Task 2 (document state)
-  - **Priority:** HIGH - entry point for content
-
-- **Task 13:** Create file metadata display
-  - Create `src/components/FileInfo.tsx`
-  - Display: filename, word count, file size, reading time estimate
-  - Use `estimateReadingTime()` from `src/lib/speed-timer.ts`
-  - Update dynamically when speed changes
-  - **Tests:** Metadata display, time calculations
-  - **Depends on:** Task 2 (document state), Task 3 (position state)
-  - **Priority:** MEDIUM - nice-to-have info
-
-- **Task 14:** Add loading and error states
-  - Create `src/components/LoadingSpinner.tsx`
-  - Create `src/components/ErrorMessage.tsx`
-  - Handle: parsing, file validation, empty content errors
-  - Provide actionable error messages
-  - **Tests:** Error scenarios, loading states
-  - **Depends on:** Task 12
-  - **Priority:** MEDIUM - UX polish
-
-### Phase 5: Speed Controls (Tasks 15-17)
-
-- **Task 15:** Create SpeedControl component
-  - Create `src/components/SpeedControl.tsx`
-  - Slider: 50-350 WPM range
-  - Numeric input: manual WPM entry
-  - Validation: clamp to MIN_WPM/MAX_WPM
-  - Persist speed to LocalStorage
-  - **Tests:** Speed adjustment, validation, persistence
-  - **Depends on:** Task 3 (position state)
-  - **Priority:** HIGH - critical for user control
-
-- **Task 16:** Create PlaybackControls component
-  - Create `src/components/PlaybackControls.tsx`
-  - Play/Pause button (prominent, toggle state)
-  - Previous/Next word buttons
-  - Keyboard shortcut handlers (SPACE, ARROWS)
-  - **Tests:** Button clicks, keyboard events, state changes
-  - **Depends on:** Task 3 (position state), Task 10 (playback)
-  - **Priority:** HIGH - essential controls
-
-- **Task 17:** Implement speed warning system
-  - Create `src/components/SpeedWarning.tsx`
-  - Trigger warning when WPM > 300
-  - Display modal/banner explaining comprehension trade-offs
-  - Reference scientific research (PROJECT-STATUS.md)
-  - Allow dismissal but persist warning preference
-  - **Tests:** Warning display logic, dismissal, persistence
-  - **Depends on:** Task 15 (speed control)
-  - **Priority:** MEDIUM - important for user education
-
-### Phase 6: Progress Tracking (Tasks 18-20)
-
-- **Task 18:** Create ProgressBar component
-  - Create `src/components/ProgressBar.tsx`
-  - Visual bar showing % complete
-  - Clickable to jump to position
-  - Show current word / total words
-  - Update smoothly during playback (throttled to 100ms)
-  - **Tests:** Progress calculation, click navigation, updates
-  - **Depends on:** Task 3 (position state)
-  - **Priority:** HIGH - important visual feedback
-
-- **Task 19:** Implement LocalStorage position persistence
-  - Create `src/lib/storage/position-storage.ts`
-  - Save: documentId, currentWordIndex, totalWords, timestamp, speed
-  - Auto-save every 5 seconds during reading
-  - Save on pause, close, navigation
-  - Load position when reopening same document
-  - **Tests:** Save/load, auto-save timing, multiple documents
-  - **Depends on:** Task 2 (document state), Task 3 (position state)
-  - **Priority:** MEDIUM - nice-to-have persistence
-
-- **Task 20:** Add position navigation controls
-  - Create `src/components/PositionControls.tsx`
-  - Position slider (0-100%)
-  - Jump to start/end buttons
-  - Jump forward/backward by percentage
-  - **Tests:** Slider interaction, jump controls, position accuracy
-  - **Depends on:** Task 3 (position state), Task 18 (progress bar)
-  - **Priority:** MEDIUM - advanced navigation
-
-### Phase 7: UI Layout & Styling (Tasks 21-24)
-
-- **Task 21:** Create dark theme CSS variables
-  - Update `src/index.css`
-  - Define color palette (dark bg, light text, red OVP accent)
-  - Typography scale (RSVP 32-48px, UI 14-16px)
-  - Spacing system
-  - Based on `specs/user-interface.md` design specs
-  - **Tests:** Visual regression (if possible), contrast ratios
-  - **Priority:** HIGH - foundational styling
-
-- **Task 22:** Create UploadScreen (no file loaded)
-  - Create `src/components/UploadScreen.tsx`
-  - Centered upload area with clear CTA
-  - List supported formats
-  - Mention file size limit
-  - Drag-over visual feedback
-  - **Tests:** Render, interaction states
-  - **Depends on:** Task 12 (FileUpload), Task 21 (theme)
-  - **Priority:** HIGH - entry screen
-
-- **Task 23:** Create ReadingScreen (file loaded)
-  - Create `src/components/ReadingScreen.tsx`
-  - Layout: RSVP display centered, controls at bottom
-  - Semi-transparent control panel
-  - Auto-hide controls option (future enhancement, skip for MVP)
-  - **Tests:** Layout, responsive design
-  - **Depends on:** Tasks 11 (RSVPReader), 16 (controls), 18 (progress)
-  - **Priority:** HIGH - main app screen
-
-- **Task 24:** Update App.tsx with routing logic
-  - Update `src/App.tsx`
-  - Route between UploadScreen and ReadingScreen
-  - Based on document state (loaded vs not loaded)
-  - Clean, minimal chrome
-  - **Tests:** Screen transitions, state-based routing
-  - **Depends on:** Tasks 22, 23
-  - **Priority:** HIGH - app integration
-
-### Phase 8: Testing & Polish (Tasks 25-28)
-
-- **Task 25:** Add integration tests for full reading flow
-  - Create `src/App.test.tsx`
-  - Test: upload file → parse → display RSVP → playback → controls
-  - Test: keyboard shortcuts end-to-end
-  - Test: position persistence across "sessions"
-  - **Tests:** E2E user flows
-  - **Depends on:** All prior tasks
-  - **Priority:** MEDIUM - quality assurance
-
-- **Task 26:** Add accessibility improvements
-  - ARIA labels for all interactive elements
-  - Keyboard navigation polish
-  - Screen reader announcements for state changes
-  - Focus management
-  - **Tests:** Accessibility audit (axe-core)
-  - **Depends on:** All components
-  - **Priority:** MEDIUM - important for inclusivity
-
-- **Task 27:** Performance optimization
-  - Debounce/throttle expensive operations
-  - Optimize re-renders (React.memo, useMemo)
-  - Test with large files (10,000+ words)
-  - Ensure smooth 60 FPS playback
-  - **Tests:** Performance benchmarks
-  - **Depends on:** All prior tasks
-  - **Priority:** LOW - optimization after functionality
-
-- **Task 28:** Create sample text files for testing
-  - Create `public/samples/` directory
-  - Add sample TXT, PDF, EPUB, DOCX files
-  - Various sizes (small, medium, large)
-  - Use for manual testing and demos
-  - **Tests:** N/A (test data)
-  - **Priority:** LOW - nice-to-have
+### Infrastructure
+- ✅ Vite build system configured with React + TypeScript
+- ✅ Vitest testing framework with React Testing Library
+- ✅ jsdom for DOM testing
+- ✅ TypeScript strict mode enabled
+- ✅ ESLint configured
+- ✅ PWA manifest configured (vite-plugin-pwa installed)
+- ✅ All required parsing libraries installed:
+  - `pdfjs-dist` (PDF parsing)
+  - `epubjs` (EPUB parsing)
+  - `mammoth` (DOCX parsing)
+  - `react-dropzone` (file upload UI)
 
 ---
 
-## Implementation Notes
+## Critical Path (Must Do First) 🔥
 
-### MVP Scope
-- **Include:** RSVP display, OVP highlighting, speed control (50-350 WPM), TXT/PDF/EPUB/DOCX parsing, progress tracking, position memory, dark UI
-- **Exclude:** Training drills, comprehension quizzes, cloud sync, browser extension, multi-word chunking, reading analytics
+These tasks block all other work and must be completed sequentially:
 
-### Testing Strategy
-- Unit tests for all `src/lib/` functions (already done for utilities)
-- Component tests for all `src/components/` files
-- Integration tests for key user flows
-- E2E test for complete reading session
-- Target: >80% code coverage
+### CP-1: Basic App Structure ✅
+**Priority:** HIGHEST | **Complexity:** Simple | **Blocking:** Everything
+**Files:** `src/App.tsx`, `src/types.ts`
 
-### Performance Targets
-- File parsing: <3s for typical documents (<1MB), <10s for large files (5-10MB)
-- RSVP timing accuracy: ±10ms variance
-- Smooth playback: 60 FPS, no dropped frames
-- UI responsiveness: <100ms for all interactions
+- [x] Replace Vite boilerplate in `App.tsx`
+- [x] Create TypeScript types/interfaces for app state
+- [x] Set up basic app state management (useState or context)
+- [x] Define state shape:
+  ```typescript
+  {
+    currentDocument: null | { words: string[], fileName: string, totalWords: number },
+    currentWordIndex: number,
+    isPlaying: boolean,
+    speed: number (WPM)
+  }
+  ```
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created `src/types.ts` with all core TypeScript interfaces (AppState, ParsedDocument, RSVPDisplayProps, etc.)
+  - Replaced Vite boilerplate in `App.tsx` with proper state management
+  - Set up state structure with useState hooks
+  - Added conditional rendering for upload/reading screens
+  - All TypeScript checks pass
+  - All 76 existing tests pass
+- **Why Critical:** All components depend on shared state structure
+- **Spec:** `specs/user-interface.md` (Component Hierarchy, lines 229-259)
 
-### Scientific Constraints
-- **Maximum speed: 350 WPM** (hard limit - research shows significant comprehension degradation above this)
-- Display warning at >300 WPM
-- Never support speeds above 350 WPM
-- Reference PROJECT-STATUS.md lines 169-198 for research citations
+### CP-2: RSVP Display Component (Minimum Viable)
+**Priority:** HIGHEST | **Complexity:** Medium | **Blocking:** All reading functionality
+**Files:** `src/components/RSVPDisplay.tsx`, `src/components/WordDisplay.tsx`
 
-### File Format Priority
-1. TXT - simplest, for initial testing
-2. PDF - most common document format
-3. EPUB - eBook format
-4. DOCX - Word documents
+- [ ] Create `RSVPDisplay` container component
+- [ ] Create `WordDisplay` component using `splitWordForOVP()` utility
+- [ ] Implement word-by-word display at fixed screen position
+- [ ] Integrate OVP highlighting (red letter styling)
+- [ ] Add basic CSS for dark theme and text styling (48px font, centered)
+- **Dependencies:** CP-1 (app state)
+- **Spec:** `specs/rsvp-display.md`, `specs/ovp-highlighting.md`, `specs/user-interface.md`
 
-### Dependencies Already Installed
+### CP-3: Playback Timing Engine
+**Priority:** HIGHEST | **Complexity:** Medium | **Blocking:** All reading controls
+**Files:** `src/hooks/useRSVPPlayback.ts` (custom hook)
+
+- [ ] Create custom hook `useRSVPPlayback(words, speed, onComplete)`
+- [ ] Implement `setInterval` or `requestAnimationFrame` timing
+- [ ] Use `wpmToMilliseconds()` for interval calculation
+- [ ] Return: `{ currentIndex, isPlaying, play, pause, next, previous, jumpTo }`
+- [ ] Ensure timing accuracy within ±10ms (spec requirement)
+- [ ] Handle pause/resume without drift
+- **Dependencies:** CP-1 (state), CP-2 (display to test)
+- **Spec:** `specs/rsvp-display.md` (Timing & Speed, lines 27-33)
+
+---
+
+## Phase 1: Core RSVP Reading
+
+**Goal:** User can paste text and see basic RSVP playback working
+
+### P1-1: Minimal Text Input (Temporary)
+**Complexity:** Simple | **Priority:** High
+
+- [ ] Create temporary `<textarea>` for manual text input (before file upload)
+- [ ] "Start Reading" button to load text into app state
+- [ ] Parse text using `parseTextToWords()` utility
+- [ ] Load words into `currentDocument` state
+- **Note:** This is scaffolding to test RSVP without building full file upload
+- **Spec:** N/A (temporary development scaffold)
+
+### P1-2: Basic Speed Control
+**Complexity:** Simple | **Priority:** High
+**Files:** `src/components/SpeedControl.tsx`
+
+- [ ] Create numeric input for WPM (50-350 range)
+- [ ] Add validation using `isValidWPM()`
+- [ ] Update app state on change
+- [ ] Display current WPM value
+- [ ] Basic styling (bottom control panel)
+- **Dependencies:** CP-3 (playback engine must respect speed changes)
+- **Spec:** `specs/speed-controls.md` (Speed Adjustment, lines 18-25)
+
+### P1-3: Play/Pause Control
+**Complexity:** Simple | **Priority:** High
+**Files:** `src/components/PlaybackControls.tsx`
+
+- [ ] Create Play/Pause toggle button
+- [ ] Call `play()` / `pause()` from playback hook
+- [ ] Visual state indicator (icon or text change)
+- [ ] Keyboard shortcut: SPACE to toggle
+- **Dependencies:** CP-3 (playback hook)
+- **Spec:** `specs/speed-controls.md` (Playback Controls, lines 32-37)
+
+### P1-4: Word Navigation
+**Complexity:** Simple | **Priority:** Medium
+**Files:** Update `PlaybackControls.tsx`
+
+- [ ] Previous word button (calls `previous()` from hook)
+- [ ] Next word button (calls `next()` from hook)
+- [ ] Keyboard shortcuts: LEFT/RIGHT arrows
+- [ ] Works during both playback and pause
+- **Dependencies:** CP-3 (navigation methods in hook)
+- **Spec:** `specs/speed-controls.md` (Navigation Controls, lines 38-42)
+
+### P1-5: Basic Progress Display
+**Complexity:** Simple | **Priority:** Medium
+**Files:** `src/components/ProgressDisplay.tsx`
+
+- [ ] Display "Word X of Y" counter
+- [ ] Calculate using `currentWordIndex` and `totalWords`
+- [ ] Update in real-time during playback
+- **Dependencies:** CP-3 (word index tracking)
+- **Spec:** `specs/progress-tracking.md` (Position Tracking, lines 20-24)
+
+### P1-6: Speed Warning Modal
+**Complexity:** Simple | **Priority:** Medium
+**Files:** `src/components/SpeedWarning.tsx`
+
+- [ ] Create modal/banner component
+- [ ] Show when `shouldShowSpeedWarning(speed)` returns true
+- [ ] Display warning message (from spec)
+- [ ] Dismissible but show again when speed exceeds 300 WPM
+- [ ] Store dismissed state in component state (future: localStorage)
+- **Dependencies:** P1-2 (speed control)
+- **Spec:** `specs/speed-controls.md` (Warning Messages, lines 106-118)
+
+**Phase 1 Success Criteria:**
+- ✓ User can paste text and click "Start Reading"
+- ✓ Words display one at a time with red OVP highlighting
+- ✓ Play/pause works with button and SPACE key
+- ✓ Speed can be adjusted (50-350 WPM)
+- ✓ Warning appears at >300 WPM
+- ✓ Left/Right arrows navigate words
+
+---
+
+## Phase 2: File Handling
+
+**Goal:** Replace manual text input with real file upload and parsing
+
+### P2-1: TXT File Parser
+**Complexity:** Simple | **Priority:** High
+**Files:** `src/parsers/txt-parser.ts`
+
+- [ ] Implement `parseTxtFile(file: File): Promise<string>`
+- [ ] Use FileReader API to read as text
+- [ ] Handle UTF-8 encoding (TextDecoder if needed)
+- [ ] Return raw text content
+- [ ] Unit tests for TXT parsing
+- **Spec:** `specs/content-parser.md` (TXT section, lines 19-23)
+
+### P2-2: File Upload UI
+**Complexity:** Medium | **Priority:** High
+**Files:** `src/components/FileUpload.tsx`, `src/components/DropZone.tsx`
+
+- [ ] Implement drag-and-drop zone using `react-dropzone`
+- [ ] Accept only: `.txt, .pdf, .epub, .docx`
+- [ ] Max file size: 50 MB
+- [ ] Visual feedback on drag-over
+- [ ] Click to open file picker as alternative
+- [ ] Display upload area when no document loaded
+- **Dependencies:** P2-1 (TXT parser to test with)
+- **Spec:** `specs/file-management.md` (File Upload, lines 18-45)
+
+### P2-3: File Validation & Error Handling
+**Complexity:** Medium | **Priority:** High
+**Files:** `src/utils/file-validator.ts`, update `FileUpload.tsx`
+
+- [ ] Validate file extension and MIME type
+- [ ] Check file size (50 MB limit)
+- [ ] Display clear error messages (from spec):
+  - Unsupported file type
+  - File too large
+  - Empty file
+- [ ] Error message component with "Try again" action
+- [ ] Unit tests for validation logic
+- **Spec:** `specs/file-management.md` (File Validation, lines 33-37; Error Messages, lines 167-185)
+
+### P2-4: Loading State During Parsing
+**Complexity:** Simple | **Priority:** Medium
+**Files:** `src/components/LoadingState.tsx`, update App state
+
+- [ ] Add `isLoading` state to app
+- [ ] Show spinner/loading indicator during file parse
+- [ ] Display "Parsing [filename]..." message
+- [ ] Block interactions during loading
+- [ ] Auto-dismiss when parsing complete
+- **Spec:** `specs/user-interface.md` (Loading States, lines 107-112)
+
+### P2-5: PDF Parser
+**Complexity:** Complex | **Priority:** Medium
+**Files:** `src/parsers/pdf-parser.ts`
+
+- [ ] Implement `parsePdfFile(file: File): Promise<string>`
+- [ ] Use `pdfjs-dist` library
+- [ ] Extract text from all pages in order
+- [ ] Handle multi-page PDFs (concatenate pages)
+- [ ] Basic error handling for corrupted PDFs
+- [ ] Unit tests with sample PDF file
+- **Dependencies:** None (can work in parallel with P2-1 through P2-4)
+- **Spec:** `specs/content-parser.md` (PDF section, lines 25-30)
+
+### P2-6: EPUB Parser
+**Complexity:** Complex | **Priority:** Medium
+**Files:** `src/parsers/epub-parser.ts`
+
+- [ ] Implement `parseEpubFile(file: File): Promise<string>`
+- [ ] Use `epubjs` library
+- [ ] Extract text from all chapters in order
+- [ ] Strip HTML tags using `extractTextFromHTML()` utility
+- [ ] Handle EPUB 2 and EPUB 3 formats
+- [ ] Unit tests with sample EPUB file
+- **Dependencies:** None (parallel work)
+- **Spec:** `specs/content-parser.md` (EPUB section, lines 32-37)
+
+### P2-7: DOCX Parser
+**Complexity:** Complex | **Priority:** Medium
+**Files:** `src/parsers/docx-parser.ts`
+
+- [ ] Implement `parseDocxFile(file: File): Promise<string>`
+- [ ] Use `mammoth` library
+- [ ] Extract text content, ignore formatting
+- [ ] Preserve paragraph structure
+- [ ] Unit tests with sample DOCX file
+- **Dependencies:** None (parallel work)
+- **Spec:** `specs/content-parser.md` (DOCX section, lines 39-43)
+
+### P2-8: Unified Parser Interface
+**Complexity:** Medium | **Priority:** High
+**Files:** `src/parsers/index.ts`, `src/parsers/parser-factory.ts`
+
+- [ ] Create `parseFile(file: File): Promise<ParsedDocument>` unified interface
+- [ ] Route to appropriate parser based on file extension
+- [ ] Return standardized object: `{ text: string, fileName: string, wordCount: number }`
+- [ ] Use `parseTextToWords()` and `countWords()` utilities
+- [ ] Use `validateText()` to check parsed content
+- [ ] Handle parsing errors with try/catch
+- **Dependencies:** P2-1, P2-5, P2-6, P2-7 (all parsers)
+- **Spec:** `specs/content-parser.md` (File Processing Flow, lines 132-143)
+
+### P2-9: File Info Display
+**Complexity:** Simple | **Priority:** Low
+**Files:** `src/components/FileInfo.tsx`
+
+- [ ] Display current file name
+- [ ] Display total word count
+- [ ] Display estimated reading time (use `estimateReadingTime()`)
+- [ ] Display file size (optional)
+- [ ] Position in control panel or header
+- **Dependencies:** P2-8 (parsed document metadata)
+- **Spec:** `specs/file-management.md` (File Information Display, lines 75-82)
+
+**Phase 2 Success Criteria:**
+- ✓ User can drag-and-drop TXT file to upload
+- ✓ User can upload PDF, EPUB, DOCX files
+- ✓ File parsing works with >95% text extraction accuracy
+- ✓ Errors show helpful messages with retry option
+- ✓ Loading spinner displays during parsing
+- ✓ File info (name, word count, time) displays correctly
+
+---
+
+## Phase 3: User Controls Enhancement
+
+**Goal:** Polished control experience matching spec requirements
+
+### P3-1: Speed Slider Control
+**Complexity:** Simple | **Priority:** High
+**Files:** Update `SpeedControl.tsx`
+
+- [ ] Add range slider input (50-350 WPM)
+- [ ] Sync slider with numeric input (bidirectional)
+- [ ] Update speed immediately on drag
+- [ ] Visual styling (dark theme)
+- [ ] Works during playback (updates timing)
+- **Dependencies:** P1-2 (numeric speed control)
+- **Spec:** `specs/speed-controls.md` (Speed Adjustment, lines 18-25)
+
+### P3-2: Speed Increment/Decrement Keyboard Shortcuts
+**Complexity:** Simple | **Priority:** Medium
+**Files:** Update `src/hooks/useRSVPPlayback.ts` or create `useKeyboardShortcuts.ts`
+
+- [ ] UP arrow: Increase speed by 25 WPM
+- [ ] DOWN arrow: Decrease speed by 25 WPM
+- [ ] Respect MIN/MAX limits
+- [ ] Update speed state and UI
+- **Dependencies:** P1-2 (speed control)
+- **Spec:** `specs/speed-controls.md` (Keyboard Shortcuts, lines 44-52)
+
+### P3-3: Progress Bar (Visual)
+**Complexity:** Medium | **Priority:** Medium
+**Files:** `src/components/ProgressBar.tsx`
+
+- [ ] Create horizontal progress bar component
+- [ ] Calculate fill percentage using `calculateProgress()` utility
+- [ ] Update in real-time during playback
+- [ ] Position at top or bottom of screen
+- [ ] Style with dark theme colors
+- **Dependencies:** P1-5 (basic progress display)
+- **Spec:** `specs/progress-tracking.md` (Visual Progress, lines 26-30)
+
+### P3-4: Clickable Progress Bar (Jump to Position)
+**Complexity:** Medium | **Priority:** Medium
+**Files:** Update `ProgressBar.tsx`
+
+- [ ] Make progress bar clickable
+- [ ] Calculate word index from click position
+- [ ] Use `progressToIndex()` utility
+- [ ] Call `jumpTo(index)` from playback hook
+- [ ] Update current word immediately
+- [ ] Works during both play and pause
+- **Dependencies:** P3-3 (progress bar), CP-3 (jumpTo method)
+- **Spec:** `specs/progress-tracking.md` (Visual Progress, line 30)
+
+### P3-5: Position Slider Control (Optional)
+**Complexity:** Medium | **Priority:** Low
+**Files:** `src/components/PositionSlider.tsx`
+
+- [ ] Create position slider (0-100% of document)
+- [ ] Dragging jumps to that position
+- [ ] Uses `progressToIndex()` for calculation
+- [ ] Visual preview on hover (optional for MVP)
+- **Dependencies:** P3-4 (jump functionality)
+- **Spec:** `specs/progress-tracking.md` (Position Slider, lines 49-54)
+
+### P3-6: Jump Controls (Begin/End)
+**Complexity:** Simple | **Priority:** Low
+**Files:** Update `PlaybackControls.tsx`
+
+- [ ] "Jump to Beginning" button (jumpTo(0))
+- [ ] "Jump to End" button (jumpTo(totalWords - 1))
+- [ ] Keyboard shortcuts (optional): HOME / END keys
+- **Dependencies:** CP-3 (jumpTo method)
+- **Spec:** `specs/progress-tracking.md` (Jump Controls, lines 56-60)
+
+**Phase 3 Success Criteria:**
+- ✓ Speed slider and numeric input work together
+- ✓ UP/DOWN arrows adjust speed by 25 WPM increments
+- ✓ Progress bar shows accurate position
+- ✓ Clicking progress bar jumps to that position
+- ✓ Jump to beginning/end works
+
+---
+
+## Phase 4: Progress & Persistence
+
+**Goal:** Reading position persists across sessions
+
+### P4-1: LocalStorage Position Save
+**Complexity:** Medium | **Priority:** High
+**Files:** `src/utils/storage.ts`
+
+- [ ] Implement `saveReadingPosition(documentId, position)` function
+- [ ] Implement `loadReadingPosition(documentId)` function
+- [ ] Schema: `{ documentId, fileName, currentWordIndex, totalWords, timestamp, speed }`
+- [ ] Store array of reading positions (max 50 documents)
+- [ ] Handle localStorage quota exceeded gracefully
+- [ ] Unit tests for save/load logic
+- **Spec:** `specs/progress-tracking.md` (LocalStorage Schema, lines 124-136)
+
+### P4-2: Document Identification
+**Complexity:** Simple | **Priority:** High
+**Files:** Update `src/utils/storage.ts`
+
+- [ ] Generate `documentId` from file name + file size
+- [ ] Simple concatenation: `${fileName}-${fileSize}`
+- [ ] (Future enhancement: content hash for better reliability)
+- **Dependencies:** P4-1 (storage functions)
+- **Spec:** `specs/progress-tracking.md` (Document Identification, lines 106-120)
+
+### P4-3: Auto-Save on Pause/Close
+**Complexity:** Medium | **Priority:** High
+**Files:** Update `App.tsx`, add `beforeunload` handler
+
+- [ ] Save position when user clicks pause
+- [ ] Save position when user closes document
+- [ ] Save position on browser tab close (`beforeunload` event)
+- [ ] Save position when navigating away
+- [ ] Debounce saves to avoid excessive writes
+- **Dependencies:** P4-1 (save function)
+- **Spec:** `specs/progress-tracking.md` (Auto-Save Timing, lines 153-159)
+
+### P4-4: Auto-Save During Reading (Periodic)
+**Complexity:** Simple | **Priority:** Medium
+**Files:** Update `useRSVPPlayback` hook
+
+- [ ] Save position every 5 seconds during active reading
+- [ ] Use `setInterval` or integrate with playback loop
+- [ ] Don't block playback (async save)
+- [ ] Clear interval on pause/stop
+- **Dependencies:** P4-1 (save function), P4-3 (debounce logic)
+- **Spec:** `specs/progress-tracking.md` (Auto-Save Timing, line 154)
+
+### P4-5: Restore Position on Document Load
+**Complexity:** Medium | **Priority:** High
+**Files:** Update `App.tsx` and file upload flow
+
+- [ ] After parsing file, check for saved position
+- [ ] Use `loadReadingPosition(documentId)` to retrieve
+- [ ] If found: Set `currentWordIndex` to saved value
+- [ ] Show notification: "Resuming from word X" (optional)
+- [ ] If not found: Start from beginning (index 0)
+- **Dependencies:** P4-1 (load function), P4-2 (document ID)
+- **Spec:** `specs/progress-tracking.md` (Session Persistence, lines 34-39)
+
+### P4-6: Storage Cleanup (Old Documents)
+**Complexity:** Simple | **Priority:** Low
+**Files:** Update `src/utils/storage.ts`
+
+- [ ] Implement `cleanupOldPositions()` function
+- [ ] Run on app initialization
+- [ ] Remove positions older than 30 days (check timestamp)
+- [ ] Keep max 50 most recent documents
+- [ ] Silent cleanup (no user notification)
+- **Dependencies:** P4-1 (storage schema)
+- **Spec:** `specs/progress-tracking.md` (Cleanup Strategy, lines 162-166)
+
+**Phase 4 Success Criteria:**
+- ✓ Reading position saves automatically every 5 seconds
+- ✓ Position saves when pausing or closing document
+- ✓ Position persists across browser sessions
+- ✓ Reopening same document resumes from saved position
+- ✓ Old document data (>30 days) is cleaned up
+
+---
+
+## Phase 5: Polish & Accessibility
+
+**Goal:** Production-ready UI with full accessibility compliance
+
+### P5-1: Dark Theme Styling (Complete)
+**Complexity:** Medium | **Priority:** High
+**Files:** `src/styles/theme.css` or CSS modules, update all components
+
+- [ ] Implement color palette from spec (see below)
+- [ ] Apply to all components consistently
+- [ ] Dark background (#1a1a1a), light text (#f5f5f5)
+- [ ] Red OVP highlight (#ff0000)
+- [ ] Test color contrast ratios (WCAG AA: 4.5:1)
+- **Spec:** `specs/user-interface.md` (Color Palette, lines 170-194)
+
+**Color Palette Reference:**
+```css
+--bg-primary: #1a1a1a;
+--bg-secondary: #2a2a2a;
+--text-primary: #f5f5f5;
+--text-secondary: #b0b0b0;
+--text-ovp: #ff0000;
+--ui-border: #444444;
+```
+
+### P5-2: Typography & Layout Polish
+**Complexity:** Medium | **Priority:** Medium
+**Files:** Update CSS across components
+
+- [ ] RSVP text: 48px font size, sans-serif
+- [ ] UI text: 14-16px for controls
+- [ ] Consistent spacing using spec values (8px, 16px, 24px, 32px)
+- [ ] Absolute center positioning for RSVP display
+- [ ] Controls at bottom with semi-transparent background
+- **Spec:** `specs/user-interface.md` (Typography Scale, lines 196-212; Spacing, lines 214-227)
+
+### P5-3: Keyboard Navigation (Full)
+**Complexity:** Medium | **Priority:** High
+**Files:** Update all interactive components, add focus styles
+
+- [ ] All controls tabbable in logical order
+- [ ] Visible focus indicators (border or outline)
+- [ ] ESC key to close document (return to upload screen)
+- [ ] Trap focus in modal (speed warning)
+- [ ] Test full keyboard-only navigation flow
+- **Spec:** `specs/user-interface.md` (Keyboard Navigation, lines 120-124)
+
+### P5-4: ARIA Labels & Screen Reader Support
+**Complexity:** Medium | **Priority:** High
+**Files:** Update all components with ARIA attributes
+
+- [ ] Semantic HTML (button, input, nav elements)
+- [ ] ARIA labels for icon-only buttons
+- [ ] Live region for RSVP word display (`aria-live="polite"`)
+- [ ] Status announcements for play/pause, speed changes
+- [ ] Error messages announced to screen readers
+- [ ] Test with VoiceOver (macOS) or NVDA (Windows)
+- **Spec:** `specs/user-interface.md` (Screen Readers, lines 126-129)
+
+### P5-5: WCAG AA Compliance Testing
+**Complexity:** Simple | **Priority:** High
+**Files:** Testing, documentation
+
+- [ ] Run axe-core accessibility tests (automated)
+- [ ] Manual color contrast checks (WebAIM Contrast Checker)
+- [ ] Manual keyboard navigation testing
+- [ ] Manual screen reader testing
+- [ ] Document accessibility features in README
+- [ ] Fix any violations found
+- **Spec:** `specs/user-interface.md` (Accessibility section, lines 119-135; Test Coverage, lines 162-167)
+
+### P5-6: Responsive Design (Mobile/Tablet)
+**Complexity:** Medium | **Priority:** Medium
+**Files:** Update CSS with media queries
+
+- [ ] Test on tablet (iPad, Android tablet)
+- [ ] Test on mobile (landscape mode preferred)
+- [ ] Larger touch targets (44x44px minimum)
+- [ ] Adjust font sizes for smaller screens
+- [ ] Ensure controls don't overlap RSVP text
+- [ ] Test drag-and-drop on touch devices
+- **Spec:** `specs/user-interface.md` (Responsive Design, lines 94-104)
+
+### P5-7: Error State UI Polish
+**Complexity:** Simple | **Priority:** Medium
+**Files:** Create `src/components/ErrorMessage.tsx`, update error handling
+
+- [ ] Consistent error message component
+- [ ] Clear error icon or visual indicator
+- [ ] Actionable guidance ("Try another file", "Retry")
+- [ ] Dismissible errors where appropriate
+- [ ] Test all error scenarios (file type, size, parsing, empty content)
+- **Spec:** `specs/file-management.md` (Error Handling, lines 105-111)
+
+**Phase 5 Success Criteria:**
+- ✓ UI matches FastReader's minimal dark aesthetic
+- ✓ All interactive elements keyboard accessible
+- ✓ Color contrast meets WCAG AA standards
+- ✓ Screen readers can navigate and use all features
+- ✓ Works on tablet and mobile devices
+- ✓ Passes automated accessibility tests (axe-core)
+
+---
+
+## Phase 6: PWA & Advanced Features
+
+**Goal:** Progressive Web App with offline support and enhancements
+
+### P6-1: PWA Service Worker Setup
+**Complexity:** Medium | **Priority:** Medium
+**Files:** `vite.config.ts`, configure vite-plugin-pwa
+
+- [ ] Configure `vite-plugin-pwa` with workbox strategies
+- [ ] Cache app shell (HTML, CSS, JS)
+- [ ] Cache static assets
+- [ ] Register service worker in `main.tsx`
+- [ ] Test offline functionality
+- **Note:** vite-plugin-pwa already installed, needs configuration
+- **Spec:** N/A (PWA infrastructure)
+
+### P6-2: Offline File Parsing
+**Complexity:** Simple | **Priority:** Low
+**Files:** Service worker configuration
+
+- [ ] Ensure all parsing libraries (pdfjs, epubjs, mammoth) work offline
+- [ ] Cache library bundles in service worker
+- [ ] Test file upload and parsing without network
+- **Dependencies:** P6-1 (service worker)
+- **Spec:** N/A (offline enhancement)
+
+### P6-3: PWA Manifest & Icons
+**Complexity:** Simple | **Priority:** Low
+**Files:** `public/manifest.json`, icon assets
+
+- [ ] Create app icons (192x192, 512x512)
+- [ ] Configure manifest.json (name, theme color, icons)
+- [ ] Test "Add to Home Screen" on mobile
+- [ ] Set theme color to match dark theme (#1a1a1a)
+- **Dependencies:** P6-1 (PWA setup)
+- **Spec:** N/A (PWA infrastructure)
+
+### P6-4: Install Prompt (Optional)
+**Complexity:** Medium | **Priority:** Low
+**Files:** `src/components/InstallPrompt.tsx`
+
+- [ ] Detect if app is installable (beforeinstallprompt event)
+- [ ] Show "Install App" button/banner
+- [ ] Trigger installation flow on click
+- [ ] Hide prompt after installation or dismissal
+- **Dependencies:** P6-1, P6-3 (PWA fully configured)
+- **Spec:** N/A (optional enhancement)
+
+### P6-5: Speed Presets (Optional Enhancement)
+**Complexity:** Simple | **Priority:** Low
+**Files:** Update `SpeedControl.tsx`
+
+- [ ] Add preset buttons: Slow (200 WPM), Medium (275 WPM), Fast (350 WPM)
+- [ ] One-click speed setting
+- [ ] Visual indicator of current preset
+- **Dependencies:** P1-2 (speed control)
+- **Spec:** `specs/speed-controls.md` (Speed Presets, lines 59-64)
+
+### P6-6: Reading Statistics (Optional Enhancement)
+**Complexity:** Medium | **Priority:** Low
+**Files:** `src/components/ReadingStats.tsx`, update tracking logic
+
+- [ ] Track total words read in session
+- [ ] Track time spent reading
+- [ ] Calculate average reading speed
+- [ ] Display stats in sidebar or modal
+- [ ] Optional: Persist stats to localStorage
+- **Dependencies:** CP-3 (playback tracking)
+- **Spec:** `specs/progress-tracking.md` (Reading Statistics, lines 61-73)
+
+**Phase 6 Success Criteria:**
+- ✓ App works offline after initial load
+- ✓ Service worker caches app shell and assets
+- ✓ App can be installed as PWA on mobile
+- ✓ File parsing works offline
+- ✓ (Optional) Speed presets functional
+- ✓ (Optional) Reading statistics display
+
+---
+
+## Known Gaps & Questions
+
+### Missing Specifications
+1. **No spec for:** State management approach (Context API vs. Redux vs. Zustand)
+   - **Recommendation:** Use React Context API for MVP (simplest, sufficient for single-user app)
+
+2. **No spec for:** URL routing / multi-screen navigation
+   - **Recommendation:** Single-page app for MVP (upload screen vs. reading screen conditional rendering)
+
+3. **No spec for:** Analytics or error logging
+   - **Recommendation:** Skip for MVP (privacy-focused, client-side only)
+
+4. **No spec for:** Performance monitoring
+   - **Recommendation:** Manual testing for MVP, add Lighthouse CI later
+
+### Ambiguities Requiring Decisions
+1. **Speed persistence across documents:**
+   - Spec says persist speed setting (speed-controls.md line 24)
+   - Spec also says save speed per document (progress-tracking.md line 131)
+   - **Decision needed:** Global speed setting OR per-document speed?
+   - **Recommendation:** Global speed for MVP, per-document is future enhancement
+
+2. **Auto-hide controls during reading:**
+   - UI spec mentions "auto-hide option" (user-interface.md line 78)
+   - No details on timing or user preference
+   - **Decision needed:** Always visible OR auto-hide after inactivity?
+   - **Recommendation:** Always visible for MVP, auto-hide is polish feature
+
+3. **Content hash vs. filename for document ID:**
+   - Progress spec gives two options (progress-tracking.md lines 109-118)
+   - **Decision needed:** Which approach for MVP?
+   - **Recommendation:** Filename + size for MVP (simpler), hash in production
+
+4. **Multi-word chunking:**
+   - Mentioned as out-of-scope (rsvp-display.md line 92)
+   - FastReader supports it (from research)
+   - **Decision needed:** Add to roadmap or stay single-word?
+   - **Recommendation:** Single-word for MVP, multi-word is v2 feature
+
+### Technical Uncertainties
+1. **PDF.js worker setup:**
+   - pdfjs-dist requires web worker configuration in Vite
+   - May need custom Vite config or workaround
+   - **Action:** Research during P2-5 implementation
+
+2. **EPUB.js bundle size:**
+   - epubjs may be large (impacts initial load time)
+   - **Action:** Check bundle size analysis, consider code splitting
+
+3. **Timing accuracy guarantee (±10ms):**
+   - Spec requires ±10ms accuracy (rsvp-display.md line 33)
+   - JavaScript timers not perfectly accurate
+   - **Action:** Test with high-speed camera or timing logs, may need requestAnimationFrame + drift correction
+
+4. **localStorage quota on mobile:**
+   - Mobile browsers have stricter localStorage limits
+   - **Action:** Test on iOS Safari and Android Chrome, implement quota exceeded handling
+
+---
+
+## Dependencies Summary
+
+**External Libraries (Already Installed):**
+- `react` + `react-dom` - UI framework
 - `pdfjs-dist` - PDF parsing
 - `epubjs` - EPUB parsing
 - `mammoth` - DOCX parsing
-- `react-dropzone` - File upload
-- `vite-plugin-pwa` - PWA capabilities
+- `react-dropzone` - File upload UI
+- `vite-plugin-pwa` - PWA support
+- `vitest` + `@testing-library/react` - Testing
+
+**No Additional Libraries Needed for MVP**
 
 ---
 
-## Next Steps for Building Loop
+## Testing Strategy
 
-1. **Run building loop:**
-   ```bash
-   cd fastreader
-   ./loop.sh 20  # Run max 20 iterations
-   ```
+### Unit Tests (Required for Each Feature)
+- All utility functions already have tests (ovp-calculator, speed-timer, text-parser)
+- Add tests for:
+  - File parsers (TXT, PDF, EPUB, DOCX)
+  - Storage utilities (save/load/cleanup)
+  - File validation logic
+  - Custom hooks (useRSVPPlayback, useKeyboardShortcuts)
 
-2. **Ralph will:**
-   - Pick Task 1 (Create TypeScript types)
-   - Search codebase to confirm not implemented
-   - Implement types in `src/types/index.ts`
-   - Write tests
-   - Run tests + typecheck + lint (backpressure)
-   - Update this plan marking Task 1 complete
-   - Commit changes
-   - Repeat for Task 2, then 3, etc.
+### Integration Tests (Critical Path)
+- File upload → parsing → display flow
+- Play/pause → word advancement → timing accuracy
+- Speed change during playback
+- Position save → close → reload → position restore
 
-3. **Monitor progress:**
-   - Each task = 1 commit
-   - Check updated IMPLEMENTATION_PLAN.md after each iteration
-   - Observe test coverage increasing
+### E2E Tests (Nice to Have)
+- Full user flow: Upload file → adjust speed → read → pause → resume → close
+- Keyboard shortcuts work across entire app
+- Accessibility (keyboard navigation, screen reader announcements)
 
-4. **Completion criteria:**
-   - All 28 tasks marked complete
-   - All tests passing (target >80% coverage)
-   - App runs in browser: upload file → read with RSVP + OVP
-   - Speed control, progress tracking, position persistence working
-   - Dark UI matching FastReader aesthetic
+### Manual Testing Checklist
+- Test on multiple browsers (Chrome, Firefox, Safari, Edge)
+- Test on multiple devices (desktop, tablet, mobile)
+- Test with real documents (long PDFs, complex EPUBs)
+- Test error scenarios (corrupted files, oversized files)
+- Accessibility audit (axe DevTools, manual screen reader test)
 
 ---
 
-**Plan Status:** READY FOR BUILDING
-**Estimated Tasks:** 28
-**Current Progress:** 0/28 (0%)
+## Estimated Complexity Breakdown
+
+**Simple Tasks:** 20 items (~1-3 hours each) = 20-60 hours
+**Medium Tasks:** 25 items (~4-8 hours each) = 100-200 hours
+**Complex Tasks:** 5 items (~12-24 hours each) = 60-120 hours
+
+**Total Estimated Effort:** 180-380 hours
+
+**MVP (Phases 1-3):** ~80-150 hours
+**Production-Ready (Phases 1-5):** ~150-280 hours
+**Full Feature Set (Phases 1-6):** ~180-380 hours
+
+---
+
+## Recommended Build Sequence
+
+**Week 1-2: Critical Path + Phase 1 (MVP Reading Experience)**
+- CP-1, CP-2, CP-3 first (foundation)
+- Then P1-1 through P1-6 (basic reading works)
+- **Deliverable:** Can paste text and read with RSVP
+
+**Week 3-4: Phase 2 (File Handling)**
+- P2-1, P2-2, P2-3, P2-4 first (TXT files work)
+- Then P2-5, P2-6, P2-7, P2-8 in parallel (all formats)
+- Then P2-9 (file info display)
+- **Deliverable:** Can upload any file type and read
+
+**Week 5: Phase 3 (Enhanced Controls)**
+- P3-1 through P3-6 (polish all controls)
+- **Deliverable:** Full control experience
+
+**Week 6: Phase 4 (Persistence)**
+- P4-1 through P4-6 (position saving works)
+- **Deliverable:** Reading position persists across sessions
+
+**Week 7-8: Phase 5 (Polish & Accessibility)**
+- P5-1 through P5-7 (production-ready)
+- **Deliverable:** WCAG AA compliant, fully styled, production-ready
+
+**Week 9+: Phase 6 (PWA & Enhancements)**
+- P6-1 through P6-6 (offline support, optional features)
+- **Deliverable:** Full PWA with offline support
+
+---
+
+## Open Questions for Product Owner
+
+1. **Speed persistence:** Global speed setting OR per-document speed preference?
+2. **Control panel:** Always visible OR auto-hide after inactivity?
+3. **Analytics:** Do we want any usage tracking (privacy-respecting, client-side only)?
+4. **Future roadmap:** Priority of multi-word chunking vs. other features?
+5. **Performance target:** What's the acceptable bundle size and initial load time?
+6. **Browser support:** Should we support IE11 or only modern browsers?
+
+---
+
+## Success Metrics (Definition of Done)
+
+**MVP Success (End of Phase 3):**
+- [ ] User can upload TXT, PDF, EPUB, DOCX files
+- [ ] RSVP display works at 50-350 WPM with OVP highlighting
+- [ ] Play/pause, speed control, word navigation all functional
+- [ ] All keyboard shortcuts work (SPACE, arrows, UP/DOWN)
+- [ ] Speed warning appears at >300 WPM
+- [ ] Basic progress tracking (word counter, progress bar)
+
+**Production Success (End of Phase 5):**
+- [ ] All MVP features plus:
+- [ ] Reading position persists across sessions
+- [ ] Dark theme UI matches FastReader aesthetic
+- [ ] WCAG AA accessibility compliance
+- [ ] Full keyboard navigation and screen reader support
+- [ ] Works on desktop, tablet, mobile
+- [ ] Zero critical bugs, smooth performance (60 FPS)
+
+**Complete Success (End of Phase 6):**
+- [ ] All production features plus:
+- [ ] Works offline as PWA
+- [ ] Installable on mobile devices
+- [ ] (Optional) Speed presets and reading statistics
+
+---
+
 **Last Updated:** 2026-01-16
+**Status:** CP-1 Completed, Ready for CP-2
+**Next Step:** Begin CP-2 (RSVP Display Component)
