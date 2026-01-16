@@ -272,17 +272,42 @@ These tasks block all other work and must be completed sequentially:
   - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (TXT section, lines 19-23)
 
-### P2-2: File Upload UI
+### P2-2: File Upload UI ✅
 **Complexity:** Medium | **Priority:** High
 **Files:** `src/components/FileUpload.tsx`, `src/components/DropZone.tsx`
 
-- [ ] Implement drag-and-drop zone using `react-dropzone`
-- [ ] Accept only: `.txt, .pdf, .epub, .docx`
-- [ ] Max file size: 50 MB
-- [ ] Visual feedback on drag-over
-- [ ] Click to open file picker as alternative
-- [ ] Display upload area when no document loaded
+- [x] Implement drag-and-drop zone using `react-dropzone`
+- [x] Accept only: `.txt, .pdf, .epub, .docx`
+- [x] Max file size: 50 MB
+- [x] Visual feedback on drag-over
+- [x] Click to open file picker as alternative
+- [x] Display upload area when no document loaded
 - **Dependencies:** P2-1 (TXT parser to test with)
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created `src/components/FileUpload.tsx` with comprehensive drag-and-drop functionality
+  - Implemented using `react-dropzone` library
+  - Features:
+    * Drag-and-drop upload area with visual feedback
+    * Click to browse alternative
+    * Accepts only `.txt`, `.pdf`, `.epub`, `.docx` files
+    * 50 MB maximum file size validation
+    * Large file warning (>10 MB)
+    * Single file upload (MVP)
+    * Full accessibility (ARIA labels, keyboard navigation, screen reader support)
+    * Dark theme styling matching app design
+    * Responsive design for mobile and tablet
+  - Created `FileUpload.css` with dark theme styling
+  - Error handling through `onError` callback
+  - Created comprehensive test suite (19 passing tests) covering:
+    * Rendering and UI elements
+    * Disabled state
+    * Accessibility (ARIA attributes, keyboard navigation, screen readers)
+    * File type validation
+    * CSS class application
+    * Callback functions
+  - All 147 tests passing in full suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/file-management.md` (File Upload, lines 18-45)
 
 ### P2-3: File Validation & Error Handling

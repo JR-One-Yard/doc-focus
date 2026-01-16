@@ -1,0 +1,123 @@
+/**
+ * FileUpload Component Styles
+ *
+ * Dark theme styling for drag-and-drop file upload area.
+ * Spec: specs/user-interface.md (Color Palette, Typography, Spacing)
+ */
+
+.file-upload {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 32px;
+  margin: 32px auto;
+  max-width: 600px;
+
+  /* Appearance */
+  background: var(--bg-secondary, #2a2a2a);
+  border: 2px dashed var(--ui-border, #444444);
+  border-radius: 8px;
+
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.file-upload:hover:not(.file-upload--disabled) {
+  background: #333333;
+  border-color: #666666;
+}
+
+.file-upload:focus:not(.file-upload--disabled) {
+  border-color: #999999;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.file-upload--active {
+  background: #333333;
+  border-color: var(--text-primary, #f5f5f5);
+  border-style: solid;
+  transform: scale(1.02);
+}
+
+.file-upload--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.file-upload__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.file-upload__icon {
+  font-size: 64px;
+  line-height: 1;
+  user-select: none;
+}
+
+.file-upload__text {
+  margin: 0;
+  color: var(--text-primary, #f5f5f5);
+}
+
+.file-upload__text--primary {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.file-upload__text--secondary {
+  font-size: 16px;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+.file-upload__info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ui-border, #444444);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-upload__supported-types,
+.file-upload__size-limit {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .file-upload {
+    min-height: 300px;
+    padding: 24px;
+    margin: 16px;
+  }
+
+  .file-upload__icon {
+    font-size: 48px;
+  }
+
+  .file-upload__text--primary {
+    font-size: 18px;
+  }
+
+  .file-upload__text--secondary {
+    font-size: 14px;
+  }
+}
+
+/* Touch-friendly tap targets for mobile */
+@media (hover: none) {
+  .file-upload {
+    min-height: 320px;
+  }
+}
