@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { AppState, SPEED_LIMITS } from './types'
+import { RSVPDisplay } from './components/RSVPDisplay'
 
 /**
  * FastReader - Speed Reading Application
@@ -77,13 +78,14 @@ function App() {
       ) : (
         // Reading Screen - shown when document is loaded
         <div className="reading-screen">
-          <div className="rsvp-display-placeholder">
-            <p>RSVP Display (CP-2) - Word {appState.currentWordIndex + 1} of {appState.currentDocument.totalWords}</p>
-            <p>Current word: {appState.currentDocument.words[appState.currentWordIndex] || ''}</p>
-            <p>Speed: {appState.speed} WPM</p>
-            <p>Playing: {appState.isPlaying ? 'Yes' : 'No'}</p>
-          </div>
+          {/* RSVP Display with OVP highlighting */}
+          <RSVPDisplay
+            word={appState.currentDocument.words[appState.currentWordIndex] || ''}
+            currentIndex={appState.currentWordIndex}
+            totalWords={appState.currentDocument.totalWords}
+          />
 
+          {/* Controls (to be replaced with proper components in CP-3 and P1) */}
           <div className="controls-placeholder">
             <button onClick={() => setCurrentDocument(null)}>
               Close Document
