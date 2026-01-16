@@ -84,7 +84,50 @@ Optimal Viewing Position is ~30-35% into word from start. See `src/lib/ovp-calcu
 - **Components:** `src/components/`
 - **Hooks:** `src/hooks/`
 - **Types:** `src/types/`
+- **Parsers:** `src/parsers/` (file format parsers: TXT, PDF, EPUB, DOCX)
+- **Utils:** `src/utils/` (validators, formatters)
 - **Tests:** Co-located with files as `*.test.ts` or `*.test.tsx`
+
+### TypeScript Configuration
+
+**IMPORTANT:** Project uses strict TypeScript with `verbatimModuleSyntax` enabled.
+
+**Common TypeScript Issues:**
+
+1. **Type-only imports:** Must use `import type { }` syntax
+   ```typescript
+   // ✅ Correct
+   import type { AppState, ParsedDocument } from './types';
+
+   // ❌ Wrong (causes build error)
+   import { AppState, ParsedDocument } from './types';
+   ```
+
+2. **React imports:** Remove unused React imports in TSX files
+   ```typescript
+   // ✅ Correct (React 18+)
+   // No React import needed for JSX
+
+   // ❌ Wrong (unless using React directly)
+   import React from 'react';
+   ```
+
+3. **State types:** Avoid literal types for useState
+   ```typescript
+   // ✅ Correct
+   const [wpm, setWpm] = useState<number>(250);
+
+   // ❌ Wrong (creates literal type '250')
+   const [wpm, setWpm] = useState(250);
+   ```
+
+4. **Test globals:** Use proper type declarations for test environment
+   ```typescript
+   // ✅ Correct
+   /// <reference types="vitest/globals" />
+   ```
+
+**Before committing:** ALWAYS run `npm run build` to catch TypeScript errors
 
 ### Storage
 
