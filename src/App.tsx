@@ -255,9 +255,10 @@ function App() {
         />
       )}
 
-      {!hasDocument && !isLoading ? (
-        // Upload Screen - shown when no document is loaded
-        <div className="upload-screen">
+      <main>
+        {!hasDocument && !isLoading ? (
+          // Upload Screen - shown when no document is loaded
+          <div className="upload-screen">
           <h1>FastReader</h1>
           <p>Speed reading with RSVP + OVP</p>
 
@@ -367,7 +368,8 @@ function App() {
           {/* Speed Warning Modal (overlay) */}
           <SpeedWarning speed={speed} />
         </div>
-      ) : null}
+        ) : null}
+      </main>
     </div>
   )
 }

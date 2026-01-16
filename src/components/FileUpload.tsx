@@ -98,15 +98,20 @@ export function FileUpload({ onFileSelect, onError, disabled = false }: FileUplo
 
   return (
     <div
-      {...getRootProps()}
+      {...getRootProps({
+        role: undefined, // Let dropzone handle the role
+        tabIndex: disabled ? -1 : undefined, // Let dropzone handle tabIndex
+        'aria-label': 'Upload file area',
+      })}
       className={`file-upload ${isDragActive ? 'file-upload--active' : ''} ${
         disabled ? 'file-upload--disabled' : ''
       }`}
-      role="button"
-      aria-label="Upload file area"
-      tabIndex={disabled ? -1 : 0}
     >
-      <input {...getInputProps()} aria-label="File input" />
+      <input
+        {...getInputProps({
+          'aria-label': 'File input',
+        })}
+      />
 
       <div className="file-upload__content">
         {isDragActive ? (
