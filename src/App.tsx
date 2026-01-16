@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
-import { AppState, SPEED_LIMITS, ParsedDocument } from './types'
+import type { ParsedDocument } from './types'
+import { SPEED_LIMITS } from './types'
 import { RSVPDisplay } from './components/RSVPDisplay'
 import { TextInput } from './components/TextInput'
 import { ProgressDisplay } from './components/ProgressDisplay'
@@ -18,8 +19,7 @@ function App() {
   const [currentDocument, setCurrentDocument] = useState<ParsedDocument | null>(
     null
   )
-  const [speed, setSpeed] = useState(SPEED_LIMITS.DEFAULT_WPM)
-  const [isLoading, setIsLoading] = useState(false)
+  const [speed, setSpeed] = useState<number>(SPEED_LIMITS.DEFAULT_WPM)
   const [error, setError] = useState<string | null>(null)
 
   // Use RSVP playback hook (only when we have a document)
@@ -94,14 +94,10 @@ function App() {
 
           {error && <div className="error-message">{error}</div>}
 
-          {isLoading ? (
-            <div className="loading">Loading...</div>
-          ) : (
-            <TextInput
-              onDocumentLoad={handleDocumentLoad}
-              disabled={isLoading}
-            />
-          )}
+          <TextInput
+            onDocumentLoad={handleDocumentLoad}
+            disabled={false}
+          />
         </div>
       ) : (
         // Reading Screen - shown when document is loaded

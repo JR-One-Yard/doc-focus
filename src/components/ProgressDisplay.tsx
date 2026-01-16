@@ -1,5 +1,3 @@
-import React from 'react'
-
 export interface ProgressDisplayProps {
   /** Current word index (0-indexed) */
   currentIndex: number
@@ -18,7 +16,7 @@ export interface ProgressDisplayProps {
 export function ProgressDisplay({
   currentIndex,
   totalWords,
-}: ProgressDisplayProps): JSX.Element {
+}: ProgressDisplayProps) {
   // Display as 1-indexed for user-facing text (Word 1, not Word 0)
   const currentWord = currentIndex + 1
   const percentage = totalWords > 0 ? Math.round((currentWord / totalWords) * 100) : 0

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { parseTextToWords, validateText, countWords } from '../lib/text-parser'
-import { ParsedDocument } from '../types'
+import type { ParsedDocument } from '../types'
 import './TextInput.css'
 
 /**

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 export interface SpeedWarningProps {
   /** Current reading speed in WPM */
@@ -17,7 +17,7 @@ export interface SpeedWarningProps {
  *
  * Spec: specs/speed-controls.md (Warning Messages, lines 106-118)
  */
-export function SpeedWarning({ speed, onDismiss }: SpeedWarningProps): JSX.Element | null {
+export function SpeedWarning({ speed, onDismiss }: SpeedWarningProps) {
   const WARNING_THRESHOLD = 300
   const [isDismissed, setIsDismissed] = useState(false)
   const [lastWarningSpeed, setLastWarningSpeed] = useState(0)

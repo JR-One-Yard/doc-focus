@@ -7,8 +7,7 @@ import {
   estimateReadingTime,
   formatReadingTime,
   MIN_WPM,
-  MAX_WPM,
-  WARNING_WPM
+  MAX_WPM
 } from './speed-timer'
 
 describe('wpmToMilliseconds', () => {

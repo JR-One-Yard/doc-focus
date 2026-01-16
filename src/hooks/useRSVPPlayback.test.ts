@@ -1,3 +1,4 @@
+/// <reference types="vitest/globals" />
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useRSVPPlayback } from './useRSVPPlayback'
@@ -8,13 +9,13 @@ const mockRAF = () => {
   let currentTime = 0
   let frameId = 0
 
-  global.requestAnimationFrame = vi.fn((callback) => {
+  window.requestAnimationFrame = vi.fn((callback) => {
     const id = ++frameId
     callbacks.set(id, callback)
     return id
   })
 
-  global.cancelAnimationFrame = vi.fn((id) => {
+  window.cancelAnimationFrame = vi.fn((id) => {
     callbacks.delete(id)
   })
 
