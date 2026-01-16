@@ -246,15 +246,30 @@ These tasks block all other work and must be completed sequentially:
 
 **Goal:** Replace manual text input with real file upload and parsing
 
-### P2-1: TXT File Parser
+### P2-1: TXT File Parser ✅
 **Complexity:** Simple | **Priority:** High
 **Files:** `src/parsers/txt-parser.ts`
 
-- [ ] Implement `parseTxtFile(file: File): Promise<string>`
-- [ ] Use FileReader API to read as text
-- [ ] Handle UTF-8 encoding (TextDecoder if needed)
-- [ ] Return raw text content
-- [ ] Unit tests for TXT parsing
+- [x] Implement `parseTxtFile(file: File): Promise<string>`
+- [x] Use FileReader API to read as text
+- [x] Handle UTF-8 encoding (TextDecoder if needed)
+- [x] Return raw text content
+- [x] Unit tests for TXT parsing
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created `src/parsers/txt-parser.ts` with `parseTxtFile()` function
+  - Implemented using FileReader API with UTF-8 encoding
+  - Handles various line endings (LF, CRLF, CR)
+  - Comprehensive error handling for empty files and whitespace
+  - Created `isTxtFile()` validation function
+  - Added comprehensive test suite with 30 passing tests covering:
+    - Successful parsing scenarios (multi-line, Unicode, special characters, large files)
+    - Error handling (empty files, whitespace-only)
+    - Encoding support (UTF-8, emojis, international characters)
+    - Real-world document scenarios
+    - File validation (extension and MIME type checking)
+  - All 128 tests passing in full test suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (TXT section, lines 19-23)
 
 ### P2-2: File Upload UI
