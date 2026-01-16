@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useFocusTrap } from '../hooks/useFocusTrap'
 import './SpeedWarning.css'
 
@@ -21,34 +21,38 @@ export interface SpeedWarningProps {
  */
 export function SpeedWarning({ speed, onDismiss }: SpeedWarningProps) {
   const WARNING_THRESHOLD = 300
-  const [isDismissed, setIsDismissed] = useState(false)
-  const [lastWarningSpeed, setLastWarningSpeed] = useState(0)
+  const [dismissedAtSpeed, setDismissedAtSpeed] = useState<number | null>(null)
+  const prevSpeedRef = useRef(speed)
+
+  // Compute visibility: show if above threshold and either never dismissed or speed increased since dismissal
+  const shouldShowWarning =
+    speed > WARNING_THRESHOLD &&
+    (dismissedAtSpeed === null || speed > dismissedAtSpeed)
+
+  // Reset dismissed state when speed drops below threshold
+  // This effect syncs dismissedAtSpeed state with speed prop changes
+  useEffect(() => {
+    const prevSpeed = prevSpeedRef.current
+    prevSpeedRef.current = speed
+
+    // Only reset if speed dropped from above threshold to below threshold
+    // This is intentional - we want to reset the dismissed state when speed changes
+    if (prevSpeed > WARNING_THRESHOLD && speed <= WARNING_THRESHOLD && dismissedAtSpeed !== null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDismissedAtSpeed(null)
+    }
+  }, [speed, dismissedAtSpeed])
 
   // Focus trap to keep keyboard focus within modal
-  const isModalVisible = speed > WARNING_THRESHOLD && !isDismissed
-  const modalRef = useFocusTrap<HTMLDivElement>(isModalVisible)
-
-  // Reset dismissed state when speed changes significantly
-  useEffect(() => {
-    // If speed goes back below threshold, reset dismissed state
-    if (speed <= WARNING_THRESHOLD) {
-      setIsDismissed(false)
-      setLastWarningSpeed(0)
-    }
-    // If speed increases again after being dismissed, show warning again
-    else if (speed > lastWarningSpeed && isDismissed) {
-      setIsDismissed(false)
-    }
-  }, [speed, lastWarningSpeed, isDismissed])
+  const modalRef = useFocusTrap<HTMLDivElement>(shouldShowWarning)
 
   const handleDismiss = () => {
-    setIsDismissed(true)
-    setLastWarningSpeed(speed)
+    setDismissedAtSpeed(speed)
     onDismiss?.()
   }
 
   // Don't show if speed is below threshold or user has dismissed
-  if (speed <= WARNING_THRESHOLD || isDismissed) {
+  if (!shouldShowWarning) {
     return null
   }
 

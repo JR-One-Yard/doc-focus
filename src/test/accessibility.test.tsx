@@ -285,13 +285,15 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
       }
 
       // All text colors meet WCAG AA 4.5:1 requirement
-      Object.entries(textColors).forEach(([_combination, ratio]) => {
+      Object.entries(textColors).forEach(([combination, ratio]) => {
         expect(ratio).toBeGreaterThanOrEqual(4.5) // WCAG AA for normal text
+        expect(combination).toBeTruthy() // Ensure combination name exists
       })
 
       // All UI component colors meet WCAG AA 3:1 requirement
-      Object.entries(uiColors).forEach(([_combination, ratio]) => {
+      Object.entries(uiColors).forEach(([combination, ratio]) => {
         expect(ratio).toBeGreaterThanOrEqual(3.0) // WCAG AA for UI components
+        expect(combination).toBeTruthy() // Ensure combination name exists
       })
     })
   })
@@ -314,16 +316,18 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
       }
 
       // All button touch targets meet or exceed 44x44px WCAG guideline
-      Object.entries(buttonTargets).forEach(([_element, size]) => {
+      Object.entries(buttonTargets).forEach(([element, size]) => {
         expect(size.height).toBeGreaterThanOrEqual(44)
         if ('width' in size && typeof size.width === 'number') {
           expect(size.width).toBeGreaterThanOrEqual(44)
         }
+        expect(element).toBeTruthy() // Ensure element name exists
       })
 
       // Full-width elements provide adequate touch targets through their width
-      Object.entries(fullWidthTargets).forEach(([_element, config]) => {
+      Object.entries(fullWidthTargets).forEach(([element, config]) => {
         expect(config.height).toBeGreaterThan(0) // Verify they have a defined height
+        expect(element).toBeTruthy() // Ensure element name exists
       })
     })
   })

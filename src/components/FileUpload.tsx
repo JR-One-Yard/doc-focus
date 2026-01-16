@@ -9,6 +9,7 @@
 
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import type { FileRejection, ErrorCode } from 'react-dropzone';
 import './FileUpload.css';
 
 interface FileUploadProps {
@@ -49,18 +50,18 @@ const ACCEPTED_FILE_TYPES = {
  */
 export function FileUpload({ onFileSelect, onError, disabled = false }: FileUploadProps) {
   const onDrop = useCallback(
-    (acceptedFiles: File[], rejectedFiles: any[]) => {
+    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       // Handle rejected files
       if (rejectedFiles.length > 0) {
         const rejection = rejectedFiles[0];
         const errors = rejection.errors || [];
 
-        if (errors.some((e: any) => e.code === 'file-too-large')) {
+        if (errors.some((e: { code: ErrorCode }) => e.code === 'file-too-large')) {
           const sizeMB = (rejection.file.size / (1024 * 1024)).toFixed(2);
           onError?.(
             `File too large. Maximum file size is 50 MB. Your file: ${sizeMB} MB`
           );
-        } else if (errors.some((e: any) => e.code === 'file-invalid-type')) {
+        } else if (errors.some((e: { code: ErrorCode }) => e.code === 'file-invalid-type')) {
           onError?.(
             'Unsupported file type. Please upload a .txt, .pdf, .epub, or .docx file.'
           );

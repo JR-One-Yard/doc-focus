@@ -265,7 +265,7 @@ describe('KeyboardShortcutsHelp', () => {
 
     it('handles onClose callback being undefined gracefully', () => {
       // @ts-expect-error Testing edge case where onClose might be undefined
-      const { container } = render(<KeyboardShortcutsHelp isOpen={true} onClose={undefined} />)
+      render(<KeyboardShortcutsHelp isOpen={true} onClose={undefined} />)
 
       // Component should still render
       expect(screen.getByText('⌨️ Keyboard Shortcuts')).toBeInTheDocument()

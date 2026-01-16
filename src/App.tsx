@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 import type { ParsedDocument } from './types'
 import { SPEED_LIMITS } from './types'
@@ -66,7 +66,7 @@ function App() {
   }, [])
 
   // Helper function to save current position
-  const saveCurrentPosition = () => {
+  const saveCurrentPosition = useCallback(() => {
     if (!currentDocument || !currentDocumentId.current) return
 
     saveReadingPosition({
@@ -77,7 +77,7 @@ function App() {
       timestamp: Date.now(),
       speed,
     })
-  }
+  }, [currentDocument, playback.currentIndex, speed])
 
   // P4-3, P4-4: Auto-save position during reading (debounced)
   useEffect(() => {
@@ -98,7 +98,7 @@ function App() {
         clearTimeout(saveTimerRef.current)
       }
     }
-  }, [currentDocument, playback.currentIndex, playback.isPlaying, speed])
+  }, [currentDocument, playback.isPlaying, saveCurrentPosition])
 
   // P4-3: Save position on browser close/reload
   useEffect(() => {
@@ -113,7 +113,7 @@ function App() {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [currentDocument, playback.currentIndex, speed])
+  }, [currentDocument, saveCurrentPosition])
 
   // Handle document load from TextInput
   const handleDocumentLoad = (document: ParsedDocument) => {

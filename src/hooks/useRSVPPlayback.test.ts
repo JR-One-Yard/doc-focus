@@ -5,7 +5,7 @@ import { useRSVPPlayback } from './useRSVPPlayback'
 
 // Mock requestAnimationFrame for testing
 const mockRAF = () => {
-  let callbacks: Map<number, (time: number) => void> = new Map()
+  const callbacks: Map<number, (time: number) => void> = new Map()
   let currentTime = 0
   let frameId = 0
 

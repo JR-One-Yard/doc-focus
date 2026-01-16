@@ -53,6 +53,7 @@ export function useRSVPPlayback({
   const startTimeRef = useRef<number | null>(null)
   const expectedTimeRef = useRef<number>(0)
   const pausedIndexRef = useRef<number>(0)
+  const playbackLoopRef = useRef<((timestamp: number) => void) | null>(null)
 
   /**
    * Stop playback and clean up animation frame
@@ -97,11 +98,18 @@ export function useRSVPPlayback({
         return
       }
 
-      // Continue playback loop
-      animationFrameRef.current = requestAnimationFrame(playbackLoop)
+      // Continue playback loop using the ref
+      if (playbackLoopRef.current) {
+        animationFrameRef.current = requestAnimationFrame(playbackLoopRef.current)
+      }
     },
     [words.length, speed, stopPlayback, onComplete]
   )
+
+  // Update the ref whenever playbackLoop changes
+  useEffect(() => {
+    playbackLoopRef.current = playbackLoop
+  }, [playbackLoop])
 
   /**
    * Start or resume playback
@@ -211,9 +219,12 @@ export function useRSVPPlayback({
 
   /**
    * Effect to handle words array changes
+   * Reset playback when the words array changes (new document loaded)
    */
   useEffect(() => {
-    // If words change, reset to beginning
+    // Reset to beginning when words change
+    // This is intentional - we want to reset state when props (words) change
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentIndex(0)
     pausedIndexRef.current = 0
     stopPlayback()

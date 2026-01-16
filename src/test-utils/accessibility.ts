@@ -6,6 +6,7 @@
 
 import { type RenderResult } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import type { AxeResults } from 'axe-core';
 import { expect } from 'vitest';
 
 // Extend Vitest's expect with jest-axe matchers
@@ -29,7 +30,7 @@ export async function runAxe(
     rules?: Record<string, { enabled: boolean }>;
     runOnly?: { type: 'tag' | 'rule'; values: string[] } | string[];
   }
-): Promise<any> {
+): Promise<AxeResults> {
   // Handle runOnly parameter - can be either an array or an object
   let runOnlyConfig;
   if (options?.runOnly) {

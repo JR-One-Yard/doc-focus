@@ -10,6 +10,13 @@
 import mammoth from 'mammoth';
 
 /**
+ * Type for mammoth input options
+ */
+interface MammothInput {
+  arrayBuffer: ArrayBuffer;
+}
+
+/**
  * Parse a DOCX file and extract its text content
  *
  * @param file - The DOCX file to parse
@@ -35,7 +42,7 @@ export async function parseDocxFile(file: File): Promise<string> {
     // mammoth.extractRawText expects { arrayBuffer: ArrayBuffer }
     result = await mammoth.extractRawText({
       arrayBuffer: arrayBuffer
-    } as any);
+    } as MammothInput);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Failed to parse DOCX: ${error.message}`);

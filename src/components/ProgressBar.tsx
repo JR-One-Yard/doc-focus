@@ -57,30 +57,28 @@ export function ProgressBar({
 
   /**
    * Handle keyboard navigation
+   * Note: React Compiler handles memoization automatically
    */
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (disabled) return
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (disabled) return
 
-      // Allow jumping with left/right arrow keys
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault()
-        const newIndex = Math.max(0, currentIndex - 1)
-        onJumpToPosition(newIndex)
-      } else if (event.key === 'ArrowRight') {
-        event.preventDefault()
-        const newIndex = Math.min(totalWords - 1, currentIndex + 1)
-        onJumpToPosition(newIndex)
-      } else if (event.key === 'Home') {
-        event.preventDefault()
-        onJumpToPosition(0)
-      } else if (event.key === 'End') {
-        event.preventDefault()
-        onJumpToPosition(totalWords - 1)
-      }
-    },
-    [disabled, currentIndex, totalWords, onJumpToPosition]
-  )
+    // Allow jumping with left/right arrow keys
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault()
+      const newIndex = Math.max(0, currentIndex - 1)
+      onJumpToPosition(newIndex)
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault()
+      const newIndex = Math.min(totalWords - 1, currentIndex + 1)
+      onJumpToPosition(newIndex)
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      onJumpToPosition(0)
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      onJumpToPosition(totalWords - 1)
+    }
+  }
 
   // Format progress for accessibility
   const progressLabel = `Reading progress: ${Math.round(progressPercentage)}% complete, word ${currentIndex + 1} of ${totalWords}`
