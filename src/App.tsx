@@ -10,6 +10,7 @@ import { ErrorMessage } from './components/ErrorMessage'
 import { ProgressDisplay } from './components/ProgressDisplay'
 import { ProgressBar } from './components/ProgressBar'
 import { SpeedWarning } from './components/SpeedWarning'
+import { KeyboardShortcutsHelp } from './components/KeyboardShortcutsHelp'
 import { FileInfo } from './components/FileInfo'
 import { SpeedControl } from './components/SpeedControl'
 import { useRSVPPlayback } from './hooks/useRSVPPlayback'
@@ -37,6 +38,7 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [loadingFileName, setLoadingFileName] = useState<string>('')
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState<boolean>(false)
 
   // Track document ID for storage
   const currentDocumentId = useRef<string | null>(null)
@@ -242,6 +244,7 @@ function App() {
     onIncreaseSpeed: handleIncreaseSpeed,
     onDecreaseSpeed: handleDecreaseSpeed,
     onClose: handleCloseDocument,
+    onShowHelp: () => setShowKeyboardHelp(true),
     enabled: hasDocument,
   })
 
@@ -259,8 +262,20 @@ function App() {
         {!hasDocument && !isLoading ? (
           // Upload Screen - shown when no document is loaded
           <div className="upload-screen">
-          <h1>FastReader</h1>
-          <p>Speed reading with RSVP + OVP</p>
+          <div className="upload-header">
+            <div>
+              <h1>FastReader</h1>
+              <p>Speed reading with RSVP + OVP</p>
+            </div>
+            <button
+              onClick={() => setShowKeyboardHelp(true)}
+              className="control-button help-button"
+              aria-label="Show keyboard shortcuts"
+              title="Keyboard shortcuts"
+            >
+              ⌨️ Shortcuts
+            </button>
+          </div>
 
           {error && (
             <ErrorMessage
@@ -363,6 +378,16 @@ function App() {
             <button onClick={handleCloseDocument} className="control-button close-button">
               Close Document
             </button>
+
+            {/* Keyboard Shortcuts Help Button */}
+            <button
+              onClick={() => setShowKeyboardHelp(true)}
+              className="control-button help-button"
+              aria-label="Show keyboard shortcuts"
+              title="Keyboard shortcuts (Press ?)"
+            >
+              ⌨️ Shortcuts
+            </button>
           </div>
 
           {/* Speed Warning Modal (overlay) */}
@@ -370,6 +395,12 @@ function App() {
         </div>
         ) : null}
       </main>
+
+      {/* Keyboard Shortcuts Help Modal (global, can be shown from anywhere) */}
+      <KeyboardShortcutsHelp
+        isOpen={showKeyboardHelp}
+        onClose={() => setShowKeyboardHelp(false)}
+      />
     </div>
   )
 }
