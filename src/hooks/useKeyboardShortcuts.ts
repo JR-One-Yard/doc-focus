@@ -13,6 +13,8 @@ export interface KeyboardShortcutsConfig {
   onDecreaseSpeed: () => void
   /** Close document / stop reading (optional) */
   onClose?: () => void
+  /** Show keyboard shortcuts help (optional) */
+  onShowHelp?: () => void
   /** Whether shortcuts are enabled (e.g., only when document is loaded) */
   enabled?: boolean
 }
@@ -27,6 +29,7 @@ export interface KeyboardShortcutsConfig {
  * - UP ARROW: Increase speed by 25 WPM
  * - DOWN ARROW: Decrease speed by 25 WPM
  * - ESC: Close document (if onClose provided)
+ * - ?: Show keyboard shortcuts help (if onShowHelp provided)
  *
  * @param config - Configuration object with callback functions
  */
@@ -38,6 +41,7 @@ export function useKeyboardShortcuts(config: KeyboardShortcutsConfig): void {
     onIncreaseSpeed,
     onDecreaseSpeed,
     onClose,
+    onShowHelp,
     enabled = true,
   } = config
 
@@ -90,6 +94,13 @@ export function useKeyboardShortcuts(config: KeyboardShortcutsConfig): void {
           }
           break
 
+        case '?':
+          if (onShowHelp) {
+            event.preventDefault()
+            onShowHelp()
+          }
+          break
+
         default:
           // No action for other keys
           break
@@ -111,5 +122,6 @@ export function useKeyboardShortcuts(config: KeyboardShortcutsConfig): void {
     onIncreaseSpeed,
     onDecreaseSpeed,
     onClose,
+    onShowHelp,
   ])
 }
