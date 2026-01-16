@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { parseEpubFile, isEpubFile } from './epub-parser';
+import { isEpubFile } from './epub-parser';
 
 describe('parseEpubFile', () => {
   describe('error handling', () => {

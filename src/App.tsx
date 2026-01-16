@@ -9,6 +9,7 @@ import { LoadingSpinner } from './components/LoadingSpinner'
 import { ErrorMessage } from './components/ErrorMessage'
 import { ProgressDisplay } from './components/ProgressDisplay'
 import { SpeedWarning } from './components/SpeedWarning'
+import { FileInfo } from './components/FileInfo'
 import { useRSVPPlayback } from './hooks/useRSVPPlayback'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { isValidWPM } from './lib/speed-timer'
@@ -206,6 +207,9 @@ function App() {
 
           {/* Basic Controls (Phase 1) */}
           <div className="controls-panel">
+            {/* File Information Display (P2-9) */}
+            <FileInfo document={currentDocument} speed={speed} />
+
             {/* Playback Controls */}
             <div className="playback-controls">
               <button

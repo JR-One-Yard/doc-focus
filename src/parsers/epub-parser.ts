@@ -46,14 +46,14 @@ export async function parseEpubFile(file: File): Promise<string> {
     // Get the spine (ordered list of content documents)
     const spine = await book.loaded.spine;
 
-    if (!spine || !spine.items || spine.items.length === 0) {
+    if (!spine || !Array.isArray(spine) || spine.length === 0) {
       throw new Error('EPUB contains no readable content');
     }
 
     // Extract text from all chapters
     const chapterTexts: string[] = [];
 
-    for (const item of spine.items) {
+    for (const item of spine) {
       try {
         // Load the section
         const section = book.spine.get(item.href);

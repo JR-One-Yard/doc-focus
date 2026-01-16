@@ -6,14 +6,14 @@
 
 The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is now complete:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
 
-**Phase 2 Progress:** P2-1, P2-2, P2-3, P2-4, P2-5, P2-6, P2-7, P2-8 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State, PDF Parser, EPUB Parser, DOCX Parser, Unified Parser Interface)
+**Phase 2 Progress:** P2-1 through P2-9 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State, PDF Parser, EPUB Parser, DOCX Parser, Unified Parser Interface, File Info Display)
 
 **Build Status:**
-- All 341 tests pass ✅
+- All 376 tests pass ✅
 - TypeScript build succeeds ✅
 - Ready for commit
 
-**Next Milestone:** P2-9 (File Info Display)
+**Next Milestone:** Phase 3 - P3-1 (Speed Slider Control)
 
 **Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
 
@@ -510,25 +510,53 @@ These tasks block all other work and must be completed sequentially:
   - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (File Processing Flow, lines 132-143)
 
-### P2-9: File Info Display
+### P2-9: File Info Display ✅
 **Complexity:** Simple | **Priority:** Low
 **Files:** `src/components/FileInfo.tsx`
 
-- [ ] Display current file name
-- [ ] Display total word count
-- [ ] Display estimated reading time (use `estimateReadingTime()`)
-- [ ] Display file size (optional)
-- [ ] Position in control panel or header
+- [x] Display current file name
+- [x] Display total word count
+- [x] Display estimated reading time (use `estimateReadingTime()`)
+- [x] Display file size (optional)
+- [x] Position in control panel or header
 - **Dependencies:** P2-8 (parsed document metadata)
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created FileInfo component (`src/components/FileInfo.tsx`) with comprehensive file metadata display:
+    * File name with extension
+    * File type indicator (TXT, PDF, EPUB, DOCX)
+    * Word count display
+    * File size display (formatted as KB or MB)
+    * Estimated reading time using `estimateReadingTime()` and `formatReadingTime()` utilities
+  - Full accessibility support:
+    * Semantic HTML with proper roles
+    * ARIA labels for all metadata fields
+    * Title attributes for additional context
+  - Dark theme styling matching application design:
+    * Consistent color palette (#2a2a2a background, #f5f5f5 text)
+    * Clean, minimal layout with proper spacing
+    * Responsive design for mobile and tablet
+  - Integrated into App.tsx reading screen controls panel
+  - Created comprehensive test suite with 35 passing tests covering:
+    * Component rendering with all metadata
+    * Accessibility attributes (role, aria-label, title)
+    * File type display for all formats (TXT, PDF, EPUB, DOCX)
+    * Word count formatting
+    * File size formatting (KB/MB)
+    * Reading time estimation accuracy
+    * CSS class application
+  - All 376 tests passing in full suite
+  - TypeScript strict mode compilation successful
+  - Fixed TypeScript build errors in epub-parser.ts and test files
 - **Spec:** `specs/file-management.md` (File Information Display, lines 75-82)
 
-**Phase 2 Success Criteria:**
+**Phase 2 Success Criteria:** ✅ ALL COMPLETE
 - ✓ User can drag-and-drop TXT file to upload
 - ✓ User can upload PDF, EPUB, DOCX files
 - ✓ File parsing works with >95% text extraction accuracy
 - ✓ Errors show helpful messages with retry option
 - ✓ Loading spinner displays during parsing
-- ⚠ File info (name, word count, time) displays correctly (P2-9 pending)
+- ✓ File info (name, word count, time) displays correctly
 
 ---
 
@@ -1069,5 +1097,5 @@ These tasks block all other work and must be completed sequentially:
 ---
 
 **Last Updated:** 2026-01-16
-**Status:** Phase 1 COMPLETE - All critical path items and core RSVP reading features implemented
-**Next Step:** Begin Phase 2 - File Handling (P2-1: TXT File Parser)
+**Status:** Phase 1 COMPLETE, Phase 2 COMPLETE - All critical path items, core RSVP reading features, and file handling implemented with 376 passing tests
+**Next Step:** Begin Phase 3 - User Controls Enhancement (P3-1: Speed Slider Control)

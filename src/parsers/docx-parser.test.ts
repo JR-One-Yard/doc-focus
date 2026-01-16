@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { parseDocxFile, isDocxFile } from './docx-parser';
+import { isDocxFile } from './docx-parser';
 
 describe('parseDocxFile', () => {
   describe('error handling', () => {
