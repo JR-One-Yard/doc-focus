@@ -6,15 +6,14 @@
 
 The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is now complete:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
 
-**Phase 2 Progress:** P2-1, P2-2, P2-3, P2-4, P2-5 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State, PDF Parser)
+**Phase 2 Progress:** P2-1, P2-2, P2-3, P2-4, P2-5, P2-6, P2-7, P2-8 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State, PDF Parser, EPUB Parser, DOCX Parser, Unified Parser Interface)
 
 **Build Status:**
-- All 280 tests pass ✅
+- All 341 tests pass ✅
 - TypeScript build succeeds ✅
 - Ready for commit
 
-**Next Milestone:** Continue Phase 2
-- Add EPUB/DOCX parsers (P2-6, P2-7)
+**Next Milestone:** P2-9 (File Info Display)
 
 **Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
 
@@ -426,42 +425,89 @@ These tasks block all other work and must be completed sequentially:
   - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (PDF section, lines 25-30)
 
-### P2-6: EPUB Parser
+### P2-6: EPUB Parser ✅
 **Complexity:** Complex | **Priority:** Medium
 **Files:** `src/parsers/epub-parser.ts`
 
-- [ ] Implement `parseEpubFile(file: File): Promise<string>`
-- [ ] Use `epubjs` library
-- [ ] Extract text from all chapters in order
-- [ ] Strip HTML tags using `extractTextFromHTML()` utility
-- [ ] Handle EPUB 2 and EPUB 3 formats
-- [ ] Unit tests with sample EPUB file
+- [x] Implement `parseEpubFile(file: File): Promise<string>`
+- [x] Use `epubjs` library
+- [x] Extract text from all chapters in order
+- [x] Strip HTML tags using `extractTextFromHTML()` utility
+- [x] Handle EPUB 2 and EPUB 3 formats
+- [x] Unit tests with sample EPUB file
 - **Dependencies:** None (parallel work)
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created `src/parsers/epub-parser.ts` with `parseEpubFile()` function
+  - Implemented using `epubjs` library for EPUB 2 and EPUB 3 support
+  - Extracts text from all chapters in proper reading order
+  - Uses `extractTextFromHTML()` utility to strip HTML tags
+  - Comprehensive error handling for corrupted/invalid EPUB files
+  - Created `isEpubFile()` validation function
+  - Added comprehensive test suite with 30 passing tests covering:
+    * Successful parsing (single/multi-chapter EPUBs)
+    * Text extraction accuracy and chapter ordering
+    * HTML tag stripping
+    * Error handling (corrupted files, empty EPUBs)
+    * File validation (extension and MIME type checking)
+  - All 310 tests passing in full suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (EPUB section, lines 32-37)
 
-### P2-7: DOCX Parser
+### P2-7: DOCX Parser ✅
 **Complexity:** Complex | **Priority:** Medium
 **Files:** `src/parsers/docx-parser.ts`
 
-- [ ] Implement `parseDocxFile(file: File): Promise<string>`
-- [ ] Use `mammoth` library
-- [ ] Extract text content, ignore formatting
-- [ ] Preserve paragraph structure
-- [ ] Unit tests with sample DOCX file
+- [x] Implement `parseDocxFile(file: File): Promise<string>`
+- [x] Use `mammoth` library
+- [x] Extract text content, ignore formatting
+- [x] Preserve paragraph structure
+- [x] Unit tests with sample DOCX file
 - **Dependencies:** None (parallel work)
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created `src/parsers/docx-parser.ts` with `parseDocxFile()` function
+  - Implemented using `mammoth` library for DOCX parsing
+  - Extracts plain text content, ignoring formatting
+  - Preserves paragraph structure with proper line breaks
+  - Comprehensive error handling for corrupted/invalid DOCX files
+  - Created `isDocxFile()` validation function
+  - Added comprehensive test suite with 31 passing tests covering:
+    * Successful parsing (single/multi-paragraph documents)
+    * Text extraction with paragraph preservation
+    * Formatting stripping (bold, italic, headings)
+    * Error handling (corrupted files, empty documents)
+    * File validation (extension and MIME type checking)
+  - All 341 tests passing in full suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (DOCX section, lines 39-43)
 
-### P2-8: Unified Parser Interface
+### P2-8: Unified Parser Interface ✅
 **Complexity:** Medium | **Priority:** High
 **Files:** `src/parsers/index.ts`, `src/parsers/parser-factory.ts`
 
-- [ ] Create `parseFile(file: File): Promise<ParsedDocument>` unified interface
-- [ ] Route to appropriate parser based on file extension
-- [ ] Return standardized object: `{ text: string, fileName: string, wordCount: number }`
-- [ ] Use `parseTextToWords()` and `countWords()` utilities
-- [ ] Use `validateText()` to check parsed content
-- [ ] Handle parsing errors with try/catch
+- [x] Create `parseFile(file: File): Promise<ParsedDocument>` unified interface
+- [x] Route to appropriate parser based on file extension
+- [x] Return standardized object: `{ text: string, fileName: string, wordCount: number }`
+- [x] Use `parseTextToWords()` and `countWords()` utilities
+- [x] Use `validateText()` to check parsed content
+- [x] Handle parsing errors with try/catch
 - **Dependencies:** P2-1, P2-5, P2-6, P2-7 (all parsers)
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created unified `parseFile()` function in `src/parsers/index.ts`
+  - Routes to appropriate parser based on file extension (.txt, .pdf, .epub, .docx)
+  - Returns standardized `ParsedDocument` interface with:
+    * `text`: extracted text content
+    * `fileName`: original file name
+    * `wordCount`: total word count using `countWords()` utility
+    * `words`: parsed word array using `parseTextToWords()` utility
+  - Comprehensive error handling with try/catch blocks
+  - Uses `validateText()` to validate parsed content is not empty
+  - Provides clear error messages for unsupported formats
+  - Integrated all four parsers (TXT, PDF, EPUB, DOCX)
+  - All 341 tests passing in full suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (File Processing Flow, lines 132-143)
 
 ### P2-9: File Info Display
@@ -482,7 +528,7 @@ These tasks block all other work and must be completed sequentially:
 - ✓ File parsing works with >95% text extraction accuracy
 - ✓ Errors show helpful messages with retry option
 - ✓ Loading spinner displays during parsing
-- ✓ File info (name, word count, time) displays correctly
+- ⚠ File info (name, word count, time) displays correctly (P2-9 pending)
 
 ---
 
