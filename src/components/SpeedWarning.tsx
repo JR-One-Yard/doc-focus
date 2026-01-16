@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import './SpeedWarning.css'
 
 export interface SpeedWarningProps {
   /** Current reading speed in WPM */
