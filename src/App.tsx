@@ -16,8 +16,7 @@ import { SpeedControl } from './components/SpeedControl'
 import { useRSVPPlayback } from './hooks/useRSVPPlayback'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { isValidWPM } from './lib/speed-timer'
-import { parseTxtFile } from './parsers/txt-parser'
-import { parseTextToWords, countWords } from './lib/text-parser'
+import { parseFile } from './parsers/index'
 import {
   generateDocumentId,
   saveReadingPosition,
@@ -129,30 +128,8 @@ function App() {
     setError(null)
 
     try {
-      // Parse the file based on type
-      // Currently only TXT is supported (P2-1 complete)
-      // PDF, EPUB, DOCX parsers coming in P2-5, P2-6, P2-7
-      let text: string
-
-      if (file.name.toLowerCase().endsWith('.txt')) {
-        text = await parseTxtFile(file)
-      } else {
-        throw new Error(
-          'Unsupported file type. Currently only .txt files are supported.'
-        )
-      }
-
-      // Parse text into words
-      const words = parseTextToWords(text)
-      const wordCount = countWords(text)
-
-      // Create parsed document
-      const document: ParsedDocument = {
-        words,
-        fileName: file.name,
-        totalWords: wordCount,
-        fileSize: file.size,
-      }
+      // Parse the file using unified parser (supports TXT, PDF, EPUB, DOCX)
+      const document = await parseFile(file)
 
       // P4-2: Generate document ID for storage
       const documentId = generateDocumentId(file.name, file.size)

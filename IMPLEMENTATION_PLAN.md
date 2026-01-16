@@ -24,9 +24,101 @@ The project has reached production-ready status with all core features, accessib
 - Bundle size: 277.75 kB (gzip: 85.25 kB) ✅
 - Comprehensive README.md documentation complete ✅
 
-**Next Milestone:** Optional manual testing (screen readers, keyboard navigation, physical devices)
+**Next Milestone:** All critical bugs fixed. App is production-ready and can be deployed or undergo optional manual testing.
 
-**Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
+**Target:** Functional MVP where users can upload files and read them with RSVP display at variable speeds.
+
+---
+
+## 🐛 CRITICAL BUG FIXES (User Testing Findings)
+
+### BUG-1: PDF/EPUB/DOCX Files Not Accepted
+**Priority:** CRITICAL | **Complexity:** Simple | **Estimated:** 30 min
+**Status:** ✅ COMPLETE
+
+**Problem:**
+- User tried uploading PDF, EPUB, and DOCX files
+- FileUpload component shows "Unsupported file type. Currently only .txt files are supported."
+- UI states these formats are supported, but App.tsx only accepts .txt files
+
+**Root Cause:**
+- All parsers exist and work: `src/parsers/{pdf,epub,docx}-parser.ts`
+- App.tsx line 137-145: Only checks for `.txt` extension
+- Missing imports and conditional logic for other file types
+
+**Fix Required:**
+1. Import parsers: `import { parsePdfFile } from './parsers/pdf-parser'` (and epub, docx)
+2. Update `handleFileSelect()` in App.tsx (lines 137-145)
+3. Add else-if blocks for `.pdf`, `.epub`, `.docx` extensions
+4. Call appropriate parser based on file extension
+
+**Acceptance Criteria:**
+- [x] User can upload .pdf file and read it
+- [x] User can upload .epub file and read it
+- [x] User can upload .docx file and read it
+- [x] Error message updates to list all 4 supported formats
+- [x] All existing tests still pass
+
+**Files to Modify:**
+- `src/App.tsx` (add imports, update handleFileSelect function)
+
+**Testing:**
+- Manual: Upload sample PDF, EPUB, DOCX files
+- Verify: Text extracts correctly and displays with RSVP
+
+**Completion Notes (2026-01-16):**
+- Replaced manual file parsing logic in App.tsx with unified parseFile() function
+- parseFile() already existed in src/parsers/index.ts and handles all file types (TXT, PDF, EPUB, DOCX)
+- Removed individual parseTxtFile import and parseTextToWords/countWords imports
+- Simplified handleFileSelect function by using parseFile() which returns complete ParsedDocument object
+- Error messages already list all 4 supported formats in parseFile()
+- All 621 tests still passing
+
+---
+
+### BUG-2: RSVP Words Hidden Behind FileInfo Panel
+**Priority:** CRITICAL | **Complexity:** Simple | **Estimated:** 15 min
+**Status:** ✅ COMPLETE
+
+**Problem:**
+- During playback, RSVP words appear behind the FileInfo panel at bottom
+- Words are not visible to user during reading
+- FileInfo panel blocks center of screen where words should display
+
+**Root Cause:**
+- RSVPDisplay uses full viewport (`width: 100vw; height: 100vh`)
+- FileInfo is positioned in controls-panel at bottom with `z-index: 10`
+- RSVPDisplay word-container centers at screen center, but panel overlays it
+- Layout doesn't account for controls-panel taking bottom space
+
+**Fix Required:**
+1. Update `src/components/RSVPDisplay.css`
+2. Change `.rsvp-display` from viewport-based to flex-based
+3. Use `flex: 1; width: 100%; height: 100%` instead of `100vw/100vh`
+4. Let parent `.reading-screen` control layout with flexbox
+5. Ensure `.rsvp-word-container` centers within available space (not full viewport)
+
+**Acceptance Criteria:**
+- [x] Words display visibly during RSVP playback
+- [x] Words are not obscured by FileInfo panel
+- [x] Words remain centered in available space
+- [x] Controls panel stays at bottom
+- [x] Progress bar stays at top
+
+**Files to Modify:**
+- `src/components/RSVPDisplay.css` (lines 20-40)
+
+**Testing:**
+- Manual: Upload file, press play
+- Verify: Each word is clearly visible in center of screen
+- Verify: FileInfo panel doesn't block word display
+
+**Completion Notes (2026-01-16):**
+- Updated src/components/RSVPDisplay.css
+- Changed .rsvp-display from viewport-based (100vw/100vh) to flex-based (flex: 1; width: 100%; height: 100%)
+- RSVPDisplay now takes available space within parent .reading-screen flex container, not entire viewport
+- Word container centers within available space, preventing overlap with controls panel
+- All 621 tests still passing
 
 ---
 
