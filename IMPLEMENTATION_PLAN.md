@@ -2,18 +2,20 @@
 
 ## Project Status Summary
 
-**Current Completion: ~70%**
+**Current Completion: ~75%**
 
-The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is now complete:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
+The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is COMPLETE:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
 
 **Phase 2 Progress:** P2-1 through P2-9 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State, PDF Parser, EPUB Parser, DOCX Parser, Unified Parser Interface, File Info Display)
+
+**Phase 3 Progress:** P3-1 through P3-4 are COMPLETE (Speed Slider Control, Speed Increment/Decrement Keyboard Shortcuts, Visual Progress Bar, Clickable Progress Bar - Jump to Position). P3-5 is Optional/Low Priority. P3-6 keyboard shortcuts (Home/End) already implemented in ProgressBar component.
 
 **Build Status:**
 - All 465 tests pass ✅
 - TypeScript build succeeds ✅
 - Ready for commit
 
-**Next Milestone:** Phase 3 - P3-4 (Clickable Progress Bar - Jump to Position)
+**Next Milestone:** Phase 4 - P4-1 (LocalStorage Position Save)
 
 **Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
 
@@ -663,17 +665,27 @@ These tasks block all other work and must be completed sequentially:
   - TypeScript strict mode compilation successful
 - **Spec:** `specs/progress-tracking.md` (Visual Progress, lines 26-30)
 
-### P3-4: Clickable Progress Bar (Jump to Position)
+### P3-4: Clickable Progress Bar (Jump to Position) ✅
 **Complexity:** Medium | **Priority:** Medium
 **Files:** Update `ProgressBar.tsx`
 
-- [ ] Make progress bar clickable
-- [ ] Calculate word index from click position
-- [ ] Use `progressToIndex()` utility
-- [ ] Call `jumpTo(index)` from playback hook
-- [ ] Update current word immediately
-- [ ] Works during both play and pause
+- [x] Make progress bar clickable
+- [x] Calculate word index from click position
+- [x] Use `progressToIndex()` utility
+- [x] Call `jumpTo(index)` from playback hook
+- [x] Update current word immediately
+- [x] Works during both play and pause
 - **Dependencies:** P3-3 (progress bar), CP-3 (jumpTo method)
+- **Status:** COMPLETED (was already implemented as part of P3-3)
+- **Completed Work:**
+  - Click-to-jump functionality fully implemented in ProgressBar.tsx (lines 41-56)
+  - Uses `progressToIndex()` utility to convert click position to word index
+  - Calls `onJumpToPosition` callback with calculated index
+  - Works during both play and pause states
+  - Integrated with `playback.jumpTo` in App.tsx (line 201)
+  - Comprehensive test coverage in ProgressBar.test.tsx (lines 68-142)
+  - All 31 ProgressBar tests passing
+  - Click position calculation accurate at all percentages (0%, 25%, 50%, 75%, 100%)
 - **Spec:** `specs/progress-tracking.md` (Visual Progress, line 30)
 
 ### P3-5: Position Slider Control (Optional)
@@ -697,7 +709,7 @@ These tasks block all other work and must be completed sequentially:
 - **Dependencies:** CP-3 (jumpTo method)
 - **Spec:** `specs/progress-tracking.md` (Jump Controls, lines 56-60)
 
-**Phase 3 Success Criteria:**
+**Phase 3 Success Criteria:** ✅ ALL COMPLETE
 - ✓ Speed slider and numeric input work together
 - ✓ UP/DOWN arrows adjust speed by 25 WPM increments
 - ✓ Progress bar shows accurate position
@@ -1161,5 +1173,5 @@ These tasks block all other work and must be completed sequentially:
 ---
 
 **Last Updated:** 2026-01-16
-**Status:** Phase 1 COMPLETE, Phase 2 COMPLETE, Phase 3 Progress (P3-1, P3-2, P3-3 COMPLETE) - All critical path items, core RSVP reading features, file handling, speed slider control, speed keyboard shortcuts, and progress bar with click-to-jump implemented with 465 passing tests
-**Next Step:** Continue Phase 3 - User Controls Enhancement (P3-4: Clickable Progress Bar - Jump to Position)
+**Status:** Phase 1 COMPLETE, Phase 2 COMPLETE, Phase 3 COMPLETE (P3-1, P3-2, P3-3, P3-4 COMPLETE; P3-5 Optional; P3-6 already implemented) - All critical path items, core RSVP reading features, file handling, enhanced user controls with speed slider, speed keyboard shortcuts, visual progress bar, and click-to-jump functionality implemented with 465 passing tests
+**Next Step:** Begin Phase 4 - Progress & Persistence (P4-1: LocalStorage Position Save)
