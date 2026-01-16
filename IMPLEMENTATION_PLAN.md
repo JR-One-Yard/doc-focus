@@ -2,12 +2,12 @@
 
 ## Project Status Summary
 
-**Current Completion: ~30%**
+**Current Completion: ~40%**
 
-The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage.
+The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. Phase 1 core features are now functional: text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, and dev server running at localhost:5173.
 
 **Next Milestone:** Build MVP Reading Experience (Phases 1-3)
-- Add minimal text input and basic controls (Phase 1)
+- Complete Phase 1 remaining tasks (P1-4, P1-5, P1-6)
 - Add file upload and basic parsing (Phase 2)
 - Create enhanced speed controls (Phase 3)
 
@@ -138,37 +138,43 @@ These tasks block all other work and must be completed sequentially:
 
 **Goal:** User can paste text and see basic RSVP playback working
 
-### P1-1: Minimal Text Input (Temporary)
+### P1-1: Minimal Text Input (Temporary) ✅
 **Complexity:** Simple | **Priority:** High
 
-- [ ] Create temporary `<textarea>` for manual text input (before file upload)
-- [ ] "Start Reading" button to load text into app state
-- [ ] Parse text using `parseTextToWords()` utility
-- [ ] Load words into `currentDocument` state
+- [x] Create temporary `<textarea>` for manual text input (before file upload)
+- [x] "Start Reading" button to load text into app state
+- [x] Parse text using `parseTextToWords()` utility
+- [x] Load words into `currentDocument` state
 - **Note:** This is scaffolding to test RSVP without building full file upload
+- **Status:** COMPLETED
+- **Completion Notes:** Created TextInput component with textarea, word count, and Start Reading button
 - **Spec:** N/A (temporary development scaffold)
 
-### P1-2: Basic Speed Control
+### P1-2: Basic Speed Control ✅
 **Complexity:** Simple | **Priority:** High
 **Files:** `src/components/SpeedControl.tsx`
 
-- [ ] Create numeric input for WPM (50-350 range)
-- [ ] Add validation using `isValidWPM()`
-- [ ] Update app state on change
-- [ ] Display current WPM value
-- [ ] Basic styling (bottom control panel)
+- [x] Create numeric input for WPM (50-350 range)
+- [x] Add validation using `isValidWPM()`
+- [x] Update app state on change
+- [x] Display current WPM value
+- [x] Basic styling (bottom control panel)
 - **Dependencies:** CP-3 (playback engine must respect speed changes)
+- **Status:** COMPLETED
+- **Completion Notes:** Integrated speed control (50-350 WPM) with warning at >300 WPM
 - **Spec:** `specs/speed-controls.md` (Speed Adjustment, lines 18-25)
 
-### P1-3: Play/Pause Control
+### P1-3: Play/Pause Control ✅
 **Complexity:** Simple | **Priority:** High
 **Files:** `src/components/PlaybackControls.tsx`
 
-- [ ] Create Play/Pause toggle button
-- [ ] Call `play()` / `pause()` from playback hook
-- [ ] Visual state indicator (icon or text change)
-- [ ] Keyboard shortcut: SPACE to toggle
+- [x] Create Play/Pause toggle button
+- [x] Call `play()` / `pause()` from playback hook
+- [x] Visual state indicator (icon or text change)
+- [x] Keyboard shortcut: SPACE to toggle
 - **Dependencies:** CP-3 (playback hook)
+- **Status:** COMPLETED
+- **Completion Notes:** Implemented play/pause toggle with previous/next navigation
 - **Spec:** `specs/speed-controls.md` (Playback Controls, lines 32-37)
 
 ### P1-4: Word Navigation
@@ -877,5 +883,5 @@ These tasks block all other work and must be completed sequentially:
 ---
 
 **Last Updated:** 2026-01-16
-**Status:** Critical Path Completed (CP-1, CP-2, CP-3)
-**Next Step:** Begin Phase 1 (Core RSVP Reading) - Start with P1-1 (Minimal Text Input)
+**Status:** Critical Path Completed (CP-1, CP-2, CP-3) + Phase 1 Core Features (P1-1, P1-2, P1-3)
+**Next Step:** Continue Phase 1 - Implement P1-4 (Word Navigation) and P1-5 (Basic Progress Display)

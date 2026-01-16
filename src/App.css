@@ -131,31 +131,112 @@ body {
   background-color: var(--bg-primary);
 }
 
-/* Controls placeholder (to be replaced with actual controls) */
-.controls-placeholder {
+/* Controls Panel */
+.controls-panel {
   position: absolute;
-  bottom: var(--spacing-xl);
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-overlay);
+  border-top: 1px solid var(--ui-border);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
   z-index: 10;
 }
 
-.controls-placeholder button {
-  padding: var(--spacing-md) var(--spacing-lg);
+/* Playback Controls */
+.playback-controls {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.control-button {
+  padding: var(--spacing-sm) var(--spacing-lg);
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--ui-border);
   border-radius: var(--radius);
   font-size: var(--font-md);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  font-family: var(--font-family);
 }
 
-.controls-placeholder button:hover {
+.control-button:hover:not(:disabled) {
   background-color: var(--ui-hover);
+  border-color: var(--ui-hover);
 }
 
-.controls-placeholder button:focus {
+.control-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.control-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.control-button:focus {
   outline: 2px solid var(--ui-focus);
   outline-offset: 2px;
+}
+
+.play-button {
+  background-color: var(--text-ovp);
+  border-color: var(--text-ovp);
+  color: white;
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.play-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* Speed Control */
+.speed-control {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  font-size: var(--font-sm);
+}
+
+.speed-control label {
+  color: var(--text-secondary);
+}
+
+.speed-input {
+  width: 80px;
+  padding: var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  font-size: var(--font-md);
+  font-family: var(--font-family);
+  text-align: center;
+}
+
+.speed-input:focus {
+  outline: none;
+  border-color: var(--ui-focus);
+}
+
+.speed-warning {
+  color: var(--status-warning);
+  font-size: var(--font-xs);
+}
+
+.close-button {
+  background-color: transparent;
+  border-color: var(--ui-border);
+  opacity: 0.7;
+}
+
+.close-button:hover:not(:disabled) {
+  opacity: 1;
 }

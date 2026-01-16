@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import './App.css'
-import { AppState, SPEED_LIMITS } from './types'
+import { AppState, SPEED_LIMITS, ParsedDocument } from './types'
 import { RSVPDisplay } from './components/RSVPDisplay'
+import { TextInput } from './components/TextInput'
+import { useRSVPPlayback } from './hooks/useRSVPPlayback'
+import { isValidWPM, shouldShowSpeedWarning } from './lib/speed-timer'
 
 /**
  * FastReader - Speed Reading Application
@@ -9,48 +12,43 @@ import { RSVPDisplay } from './components/RSVPDisplay'
  */
 function App() {
   // Initialize app state
-  const [appState, setAppState] = useState<AppState>({
-    currentDocument: null,
-    currentWordIndex: 0,
-    isPlaying: false,
-    speed: SPEED_LIMITS.DEFAULT_WPM,
-    isLoading: false,
-    error: null,
+  const [currentDocument, setCurrentDocument] = useState<ParsedDocument | null>(
+    null
+  )
+  const [speed, setSpeed] = useState(SPEED_LIMITS.DEFAULT_WPM)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Use RSVP playback hook (only when we have a document)
+  const playback = useRSVPPlayback({
+    words: currentDocument?.words || [],
+    speed,
+    onComplete: () => {
+      // Auto-stop when playback completes
+    },
   })
 
-  // State setters for child components
-  const setCurrentDocument = (document: AppState['currentDocument']) => {
-    setAppState(prev => ({
-      ...prev,
-      currentDocument: document,
-      currentWordIndex: 0, // Reset to beginning when new document loaded
-      isPlaying: false, // Stop playback when new document loaded
-      error: null, // Clear any previous errors
-    }))
-  }
-
-  const setCurrentWordIndex = (index: number) => {
-    setAppState(prev => ({ ...prev, currentWordIndex: index }))
-  }
-
-  const setIsPlaying = (playing: boolean) => {
-    setAppState(prev => ({ ...prev, isPlaying: playing }))
-  }
-
-  const setSpeed = (speed: number) => {
-    setAppState(prev => ({ ...prev, speed }))
-  }
-
-  const setIsLoading = (loading: boolean) => {
-    setAppState(prev => ({ ...prev, isLoading: loading }))
-  }
-
-  const setError = (error: string | null) => {
-    setAppState(prev => ({ ...prev, error, isLoading: false }))
-  }
-
   // Determine which screen to show
-  const hasDocument = appState.currentDocument !== null
+  const hasDocument = currentDocument !== null
+
+  // Handle document load from TextInput
+  const handleDocumentLoad = (document: ParsedDocument) => {
+    setCurrentDocument(document)
+    setError(null)
+  }
+
+  // Handle close document
+  const handleCloseDocument = () => {
+    playback.pause()
+    setCurrentDocument(null)
+  }
+
+  // Handle speed change
+  const handleSpeedChange = (newSpeed: number) => {
+    if (isValidWPM(newSpeed)) {
+      setSpeed(newSpeed)
+    }
+  }
 
   return (
     <div className="app">
@@ -60,19 +58,15 @@ function App() {
           <h1>FastReader</h1>
           <p>Speed reading with RSVP + OVP</p>
 
-          {appState.error && (
-            <div className="error-message">
-              {appState.error}
-            </div>
-          )}
+          {error && <div className="error-message">{error}</div>}
 
-          {appState.isLoading ? (
+          {isLoading ? (
             <div className="loading">Loading...</div>
           ) : (
-            <div className="upload-placeholder">
-              <p>File upload will be implemented in Phase 2</p>
-              <p>For now, use the text input below (Phase 1)</p>
-            </div>
+            <TextInput
+              onDocumentLoad={handleDocumentLoad}
+              disabled={isLoading}
+            />
           )}
         </div>
       ) : (
@@ -80,14 +74,61 @@ function App() {
         <div className="reading-screen">
           {/* RSVP Display with OVP highlighting */}
           <RSVPDisplay
-            word={appState.currentDocument.words[appState.currentWordIndex] || ''}
-            currentIndex={appState.currentWordIndex}
-            totalWords={appState.currentDocument.totalWords}
+            word={currentDocument.words[playback.currentIndex] || ''}
+            currentIndex={playback.currentIndex}
+            totalWords={currentDocument.totalWords}
           />
 
-          {/* Controls (to be replaced with proper components in CP-3 and P1) */}
-          <div className="controls-placeholder">
-            <button onClick={() => setCurrentDocument(null)}>
+          {/* Basic Controls (Phase 1) */}
+          <div className="controls-panel">
+            {/* Playback Controls */}
+            <div className="playback-controls">
+              <button
+                onClick={playback.previous}
+                disabled={playback.currentIndex === 0}
+                className="control-button"
+              >
+                ← Previous
+              </button>
+
+              <button
+                onClick={playback.isPlaying ? playback.pause : playback.play}
+                className="control-button play-button"
+              >
+                {playback.isPlaying ? '⏸ Pause' : '▶ Play'}
+              </button>
+
+              <button
+                onClick={playback.next}
+                disabled={
+                  playback.currentIndex >= currentDocument.totalWords - 1
+                }
+                className="control-button"
+              >
+                Next →
+              </button>
+            </div>
+
+            {/* Speed Control */}
+            <div className="speed-control">
+              <label htmlFor="speed-input">Speed (WPM):</label>
+              <input
+                id="speed-input"
+                type="number"
+                min={SPEED_LIMITS.MIN_WPM}
+                max={SPEED_LIMITS.MAX_WPM}
+                step={25}
+                value={speed}
+                onChange={(e) => handleSpeedChange(Number(e.target.value))}
+                className="speed-input"
+              />
+              {shouldShowSpeedWarning(speed) && (
+                <span className="speed-warning">⚠️ High speed may reduce comprehension</span>
+              )}
+            </div>
+
+            {/* Close Document */}
+            <button onClick={handleCloseDocument} className="control-button close-button">
               Close Document
             </button>
           </div>
