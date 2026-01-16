@@ -4,11 +4,16 @@ import type { ParsedDocument } from './types'
 import { SPEED_LIMITS } from './types'
 import { RSVPDisplay } from './components/RSVPDisplay'
 import { TextInput } from './components/TextInput'
+import { FileUpload } from './components/FileUpload'
+import { LoadingSpinner } from './components/LoadingSpinner'
+import { ErrorMessage } from './components/ErrorMessage'
 import { ProgressDisplay } from './components/ProgressDisplay'
 import { SpeedWarning } from './components/SpeedWarning'
 import { useRSVPPlayback } from './hooks/useRSVPPlayback'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { isValidWPM } from './lib/speed-timer'
+import { parseTxtFile } from './parsers/txt-parser'
+import { parseTextToWords, countWords } from './lib/text-parser'
 
 /**
  * FastReader - Speed Reading Application
@@ -21,6 +26,8 @@ function App() {
   )
   const [speed, setSpeed] = useState<number>(SPEED_LIMITS.DEFAULT_WPM)
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loadingFileName, setLoadingFileName] = useState<string>('')
 
   // Use RSVP playback hook (only when we have a document)
   const playback = useRSVPPlayback({
@@ -38,6 +45,64 @@ function App() {
   const handleDocumentLoad = (document: ParsedDocument) => {
     setCurrentDocument(document)
     setError(null)
+  }
+
+  // Handle file selection and parsing
+  const handleFileSelect = async (file: File) => {
+    setIsLoading(true)
+    setLoadingFileName(file.name)
+    setError(null)
+
+    try {
+      // Parse the file based on type
+      // Currently only TXT is supported (P2-1 complete)
+      // PDF, EPUB, DOCX parsers coming in P2-5, P2-6, P2-7
+      let text: string
+
+      if (file.name.toLowerCase().endsWith('.txt')) {
+        text = await parseTxtFile(file)
+      } else {
+        throw new Error(
+          'Unsupported file type. Currently only .txt files are supported.'
+        )
+      }
+
+      // Parse text into words
+      const words = parseTextToWords(text)
+      const wordCount = countWords(text)
+
+      // Create parsed document
+      const document: ParsedDocument = {
+        words,
+        fileName: file.name,
+        totalWords: wordCount,
+        fileSize: file.size,
+      }
+
+      setCurrentDocument(document)
+      setError(null)
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Failed to parse file. Please try another file.'
+      setError(errorMessage)
+    } finally {
+      setIsLoading(false)
+      setLoadingFileName('')
+    }
+  }
+
+  // Handle file parsing error
+  const handleFileError = (errorMessage: string) => {
+    setError(errorMessage)
+  }
+
+  // Handle cancel parsing
+  const handleCancelParsing = () => {
+    setIsLoading(false)
+    setLoadingFileName('')
+    setError('File parsing cancelled')
   }
 
   // Handle close document
@@ -86,20 +151,44 @@ function App() {
 
   return (
     <div className="app">
-      {!hasDocument ? (
+      {/* Loading State - shown during file parsing */}
+      {isLoading && (
+        <LoadingSpinner
+          fileName={loadingFileName}
+          onCancel={handleCancelParsing}
+        />
+      )}
+
+      {!hasDocument && !isLoading ? (
         // Upload Screen - shown when no document is loaded
         <div className="upload-screen">
           <h1>FastReader</h1>
           <p>Speed reading with RSVP + OVP</p>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && (
+            <ErrorMessage
+              message={error}
+              onRetry={() => setError(null)}
+              showRetry={false}
+            />
+          )}
+
+          <FileUpload
+            onFileSelect={handleFileSelect}
+            onError={handleFileError}
+            disabled={isLoading}
+          />
+
+          <div className="divider">
+            <span>or</span>
+          </div>
 
           <TextInput
             onDocumentLoad={handleDocumentLoad}
-            disabled={false}
+            disabled={isLoading}
           />
         </div>
-      ) : (
+      ) : !isLoading && currentDocument ? (
         // Reading Screen - shown when document is loaded
         <div className="reading-screen">
           {/* Progress Display */}
@@ -169,7 +258,7 @@ function App() {
           {/* Speed Warning Modal (overlay) */}
           <SpeedWarning speed={speed} />
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

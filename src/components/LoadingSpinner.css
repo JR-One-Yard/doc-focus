@@ -1,0 +1,126 @@
+/**
+ * LoadingSpinner Component Styles
+ *
+ * Dark theme styling for loading state with animated spinner.
+ */
+
+/* Container - full screen overlay */
+.loading-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary, #1a1a1a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Inner container */
+.loading-spinner__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg, 24px);
+}
+
+/* Spinner icon container */
+.loading-spinner__icon {
+  width: 64px;
+  height: 64px;
+}
+
+/* Animated spinner */
+.spinner {
+  width: 64px;
+  height: 64px;
+  border: 4px solid var(--ui-border, #444444);
+  border-top: 4px solid var(--text-primary, #f5f5f5);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Spin animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading message */
+.loading-spinner__message {
+  font-size: var(--font-lg, 18px);
+  color: var(--text-primary, #f5f5f5);
+  margin: 0;
+  text-align: center;
+}
+
+/* Filename highlight */
+.loading-spinner__filename {
+  color: var(--text-secondary, #b0b0b0);
+  font-style: italic;
+}
+
+/* Cancel button */
+.loading-spinner__cancel {
+  margin-top: var(--spacing-md, 16px);
+  padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
+  background-color: var(--bg-secondary, #2a2a2a);
+  color: var(--text-primary, #f5f5f5);
+  border: 1px solid var(--ui-border, #444444);
+  border-radius: 4px;
+  font-size: var(--font-base, 16px);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.loading-spinner__cancel:hover {
+  background-color: #333333;
+  border-color: #666666;
+}
+
+.loading-spinner__cancel:focus {
+  outline: 2px solid var(--text-primary, #f5f5f5);
+  outline-offset: 2px;
+}
+
+.loading-spinner__cancel:active {
+  background-color: #3a3a3a;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .loading-spinner__message {
+    font-size: var(--font-base, 16px);
+    padding: 0 var(--spacing-md, 16px);
+  }
+
+  .loading-spinner__icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border-width: 3px;
+  }
+}

@@ -123,6 +123,26 @@ body {
   color: var(--text-secondary);
 }
 
+/* Divider between upload options */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: 600px;
+  margin: var(--spacing-lg) 0;
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--ui-border);
+}
+
 /* Reading Screen */
 .reading-screen {
   width: 100%;

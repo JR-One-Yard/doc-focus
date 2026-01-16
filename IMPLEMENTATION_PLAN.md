@@ -6,15 +6,14 @@
 
 The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is now complete:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
 
-**Phase 2 Progress:** P2-1, P2-2, and P2-3 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling)
+**Phase 2 Progress:** P2-1, P2-2, P2-3, P2-4 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State)
 
 **Build Status:**
-- All 229 tests pass ✅
+- All 251 tests pass ✅
 - TypeScript build succeeds ✅
 - Ready for commit
 
 **Next Milestone:** Continue Phase 2
-- Add loading state during parsing (P2-4)
 - Add PDF/EPUB/DOCX parsers (P2-5, P2-6, P2-7)
 
 **Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
@@ -358,15 +357,38 @@ These tasks block all other work and must be completed sequentially:
   - TypeScript strict mode compilation successful
 - **Spec:** `specs/file-management.md` (File Validation, lines 33-37; Error Messages, lines 167-185)
 
-### P2-4: Loading State During Parsing
+### P2-4: Loading State During Parsing ✅
 **Complexity:** Simple | **Priority:** Medium
-**Files:** `src/components/LoadingState.tsx`, update App state
+**Files:** `src/components/LoadingSpinner.tsx`, update App state
 
-- [ ] Add `isLoading` state to app
-- [ ] Show spinner/loading indicator during file parse
-- [ ] Display "Parsing [filename]..." message
-- [ ] Block interactions during loading
-- [ ] Auto-dismiss when parsing complete
+- [x] Add `isLoading` state to app
+- [x] Show spinner/loading indicator during file parse
+- [x] Display "Parsing [filename]..." message
+- [x] Block interactions during loading
+- [x] Auto-dismiss when parsing complete
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created LoadingSpinner component (`src/components/LoadingSpinner.tsx`) with:
+    * Animated spinner with CSS keyframe animation
+    * "Parsing [filename]..." message display
+    * Cancel button for aborting slow operations
+    * Full accessibility (ARIA labels, role="status", screen reader support)
+    * Dark theme styling matching app design (#1a1a1a background, #f5f5f5 text)
+    * Responsive design for all screen sizes
+  - Integrated into App.tsx:
+    * Added `isLoading` state management
+    * Made file parsing async with loading state
+    * FileUpload component disabled during parsing
+    * Loading spinner shows/hides automatically based on state
+    * Cancel functionality to abort file parsing
+  - Created comprehensive test suite (22 passing tests) covering:
+    * Component rendering with all props
+    * Accessibility attributes (ARIA labels, role, aria-busy)
+    * Cancel button functionality
+    * CSS class application
+    * Responsive behavior
+  - All 251 tests passing in full suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/user-interface.md` (Loading States, lines 107-112)
 
 ### P2-5: PDF Parser
