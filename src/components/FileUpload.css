@@ -121,3 +121,14 @@
     min-height: 320px;
   }
 }
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .file-upload {
+    transition: none;
+  }
+
+  .file-upload--active {
+    transform: none;
+  }
+}

@@ -123,3 +123,22 @@
     padding: 12px 24px;
   }
 }
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .error-message {
+    animation: none;
+  }
+
+  .error-message__retry-button {
+    transition: none;
+  }
+
+  .error-message__retry-button:hover {
+    transform: none;
+  }
+
+  .error-message__retry-button:active {
+    transform: none;
+  }
+}

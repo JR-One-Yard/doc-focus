@@ -319,6 +319,7 @@ function App() {
                 onClick={playback.previous}
                 disabled={playback.currentIndex === 0}
                 className="control-button"
+                aria-label="Previous word"
               >
                 ← Previous
               </button>
@@ -336,6 +337,8 @@ function App() {
                   }
                 }}
                 className="control-button play-button"
+                aria-label={playback.isPlaying ? 'Pause reading' : 'Play reading'}
+                aria-pressed={playback.isPlaying}
               >
                 {playback.isPlaying ? '⏸ Pause' : '▶ Play'}
               </button>
@@ -346,6 +349,7 @@ function App() {
                   playback.currentIndex >= currentDocument.totalWords - 1
                 }
                 className="control-button"
+                aria-label="Next word"
               >
                 Next →
               </button>

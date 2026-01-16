@@ -22,13 +22,24 @@ export interface RSVPDisplayProps {
 export function RSVPDisplay({ word, currentIndex, totalWords }: RSVPDisplayProps) {
   return (
     <div className="rsvp-display" data-testid="rsvp-display">
+      {/* Screen reader live region for word announcements */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="visually-hidden"
+        data-testid="rsvp-live-region"
+      >
+        {word}
+      </div>
+
       {/* Main word display - absolutely centered */}
-      <div className="rsvp-word-container">
+      <div className="rsvp-word-container" aria-hidden="true">
         <WordDisplay word={word} />
       </div>
 
       {/* Progress indicator - bottom of display */}
-      <div className="rsvp-progress" data-testid="rsvp-progress">
+      <div className="rsvp-progress" data-testid="rsvp-progress" aria-live="polite">
         Word {currentIndex + 1} of {totalWords}
       </div>
     </div>

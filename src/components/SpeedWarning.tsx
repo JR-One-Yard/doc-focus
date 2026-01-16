@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 import './SpeedWarning.css'
 
 export interface SpeedWarningProps {
@@ -22,6 +23,10 @@ export function SpeedWarning({ speed, onDismiss }: SpeedWarningProps) {
   const WARNING_THRESHOLD = 300
   const [isDismissed, setIsDismissed] = useState(false)
   const [lastWarningSpeed, setLastWarningSpeed] = useState(0)
+
+  // Focus trap to keep keyboard focus within modal
+  const isModalVisible = speed > WARNING_THRESHOLD && !isDismissed
+  const modalRef = useFocusTrap<HTMLDivElement>(isModalVisible)
 
   // Reset dismissed state when speed changes significantly
   useEffect(() => {
@@ -49,9 +54,16 @@ export function SpeedWarning({ speed, onDismiss }: SpeedWarningProps) {
 
   return (
     <div className="speed-warning-overlay">
-      <div className="speed-warning-modal">
+      <div
+        ref={modalRef}
+        className="speed-warning-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="speed-warning-title"
+        aria-describedby="speed-warning-description"
+      >
         <div className="speed-warning-header">
-          <h3>⚠️ High Speed Warning</h3>
+          <h3 id="speed-warning-title">⚠️ High Speed Warning</h3>
           <button
             className="close-button"
             onClick={handleDismiss}
@@ -60,7 +72,7 @@ export function SpeedWarning({ speed, onDismiss }: SpeedWarningProps) {
             ×
           </button>
         </div>
-        <div className="speed-warning-content">
+        <div className="speed-warning-content" id="speed-warning-description">
           <p>
             <strong>At speeds above 300 WPM, comprehension may decrease significantly.</strong>
           </p>
