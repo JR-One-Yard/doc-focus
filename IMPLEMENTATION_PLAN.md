@@ -1048,14 +1048,19 @@ These tasks block all other work and must be completed sequentially:
     * ProgressBar.css: Already had reduced motion support
     * SpeedControl.css: Already had reduced motion support
     * All components now respect @media (prefers-reduced-motion: reduce)
-  - **NEW:** Automated accessibility testing COMPLETE
-    * Created comprehensive accessibility test suite with 23 passing tests
-    * Test file: `src/test/accessibility.test.tsx`
-    * Uses @axe-core/react and jest-axe for automated WCAG validation
-    * Tests cover all major components: WordDisplay, FileUpload, ErrorMessage, LoadingSpinner, FileInfo, SpeedControl, ProgressBar, SpeedWarning
-    * Validates color contrast ratios, touch targets, keyboard navigation, screen reader support, reduced motion
-    * Fixed FileUpload component to have proper aria-label on file input element
-    * All 598 tests passing (including 23 new accessibility tests)
+  - **NEW:** Automated accessibility testing COMPLETE ✅
+    * Created 48 comprehensive accessibility tests across 7 test files
+    * Component test files: App.test.tsx, RSVPDisplay.test.tsx, SpeedControl.test.tsx, SpeedWarning.test.tsx, ProgressBar.test.tsx, ErrorMessage.test.tsx, FileUpload.test.tsx
+    * Created accessibility testing utilities in src/test-utils/accessibility.ts
+    * Integrated jest-axe with Vitest for automated WCAG validation
+    * All 594 tests passing (48 new accessibility tests)
+    * Fixed all WCAG AA violations found by axe:
+      - Fixed nested-interactive violation in FileUpload component
+      - Added main landmark to App.tsx for proper semantic structure
+      - Fixed ProgressBar ARIA values (NaN issue)
+      - Added aria-label to file input element
+    * Test coverage: WCAG 2.1 AA rules, color contrast, keyboard navigation, ARIA attributes, forms, best practices
+    * Components fully tested: App, RSVPDisplay, SpeedControl, SpeedWarning, ProgressBar, ErrorMessage, FileUpload
 - **Remaining (manual testing/documentation - MEDIUM priority):**
   - Manual keyboard navigation full flow testing (2 hrs)
   - Screen reader testing with VoiceOver/NVDA (2-3 hrs)
@@ -1117,7 +1122,7 @@ These tasks block all other work and must be completed sequentially:
 - ✅ Color contrast meets WCAG AA standards (P5-5 verified)
 - ✅ Screen readers can navigate and use all features (P5-4 90% - all ARIA implemented)
 - ✅ Works on tablet and mobile devices (P5-6 COMPLETE, needs manual testing)
-- ✅ Passes automated accessibility tests (P5-5 COMPLETE - 23 axe-core tests passing)
+- ✅ Passes automated accessibility tests (P5-5 COMPLETE - 48 axe-core tests, all WCAG AA violations fixed)
 
 **Phase 5 Overall Status:** 7/7 tasks at 90%+ completion (96% complete overall)
 
@@ -1247,11 +1252,17 @@ These tasks block all other work and must be completed sequentially:
 5. ✅ Create SpeedWarning tests (2 hrs) - DONE
 6. ✅ Add reduced motion support (30 min) - DONE
 
-**✅ Sprint 2: Automated Accessibility Testing (COMPLETE - 2.5 hours completed)**
-1. ✅ Set up axe-core testing infrastructure (1 hr) - DONE
-2. ✅ Create comprehensive accessibility test suite (1.5 hrs) - DONE
-3. ✅ Fixed FileUpload aria-label issue (15 min) - DONE
-4. ✅ All 23 accessibility tests passing - DONE
+**✅ Sprint 2: Automated Accessibility Testing (COMPLETE - 3 hours completed)**
+1. ✅ Installed axe-core and jest-axe dependencies (15 min) - DONE
+2. ✅ Created accessibility testing utilities (src/test-utils/accessibility.ts) (30 min) - DONE
+3. ✅ Set up jest-axe integration with Vitest (30 min) - DONE
+4. ✅ Created 48 comprehensive accessibility tests across 7 test files (1.5 hrs) - DONE
+5. ✅ Fixed all WCAG AA violations found by axe (30 min) - DONE
+   - Fixed nested-interactive violation in FileUpload
+   - Added main landmark to App.tsx
+   - Fixed ProgressBar ARIA NaN values
+   - Added aria-label to file input
+6. ✅ All 594 tests passing (48 new accessibility tests) - DONE
 
 **Sprint 3: Manual Testing & Verification (4-6 hours remaining)**
 1. ⚠️ Manual keyboard navigation testing (2 hrs) - MEDIUM priority
@@ -1546,12 +1557,12 @@ These tasks block all other work and must be completed sequentially:
 - ✅ Phase 2 (File Handling): 100% COMPLETE
 - ✅ Phase 3 (Enhanced Controls): 100% COMPLETE
 - ✅ Phase 4 (Persistence): 100% COMPLETE
-- ✅ Phase 5 (Polish & Accessibility): 95% COMPLETE (all automated testing done)
+- ✅ Phase 5 (Polish & Accessibility): 96% COMPLETE (automated testing complete)
   - P5-1 Dark Theme: ✅ COMPLETE
   - P5-2 Typography/Layout: ✅ COMPLETE
   - P5-3 Keyboard Navigation: ✅ 90% (all critical features done, missing help UI)
   - P5-4 ARIA/Screen Readers: ✅ 90% (all ARIA implemented, needs manual testing)
-  - P5-5 WCAG Testing: ✅ COMPLETE (automated tests done, manual testing remains)
+  - P5-5 WCAG Testing: ✅ COMPLETE (48 axe-core tests, all WCAG AA violations fixed)
   - P5-6 Responsive Design: ✅ COMPLETE (needs manual device testing)
   - P5-7 Error UI: ✅ COMPLETE
 - ⏸️ Phase 6 (PWA): Not started (optional features)
