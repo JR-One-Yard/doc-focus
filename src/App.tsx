@@ -8,6 +8,7 @@ import { FileUpload } from './components/FileUpload'
 import { LoadingSpinner } from './components/LoadingSpinner'
 import { ErrorMessage } from './components/ErrorMessage'
 import { ProgressDisplay } from './components/ProgressDisplay'
+import { ProgressBar } from './components/ProgressBar'
 import { SpeedWarning } from './components/SpeedWarning'
 import { FileInfo } from './components/FileInfo'
 import { SpeedControl } from './components/SpeedControl'
@@ -193,6 +194,14 @@ function App() {
       ) : !isLoading && currentDocument ? (
         // Reading Screen - shown when document is loaded
         <div className="reading-screen">
+          {/* Visual Progress Bar (top of screen) */}
+          <ProgressBar
+            currentIndex={playback.currentIndex}
+            totalWords={currentDocument.totalWords}
+            onJumpToPosition={playback.jumpTo}
+            disabled={false}
+          />
+
           {/* Progress Display */}
           <ProgressDisplay
             currentIndex={playback.currentIndex}
