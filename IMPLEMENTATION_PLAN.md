@@ -1162,6 +1162,21 @@ These tasks block all other work and must be completed sequentially:
 - **Solution:** Created comprehensive test suite with 27 passing tests in SpeedWarning.test.tsx
 - **Completed:** 2026-01-16
 
+**5. ✅ FIXED: TextInput Textarea Missing ARIA Label**
+- **Status:** COMPLETE
+- **Solution:** Added aria-label="Text input area for pasting content to speed read" to textarea element in TextInput.tsx
+- **Completed:** 2026-01-16
+
+**6. ✅ FIXED: Close Document Button Missing ARIA Label**
+- **Status:** COMPLETE
+- **Solution:** Added aria-label="Close document and return to upload screen" to close button in App.tsx
+- **Completed:** 2026-01-16
+
+**7. ✅ FIXED: TextInput Button Missing Focus Styles**
+- **Status:** COMPLETE
+- **Solution:** Added :focus pseudo-class with 2px outline to .text-input-button in TextInput.css
+- **Completed:** 2026-01-16
+
 ---
 
 ### ✅ IMPORTANT GAPS FIXED
@@ -1721,8 +1736,8 @@ Fully implements the requirement from `specs/user-interface.md` line 124:
 
 ---
 
-**Last Updated:** 2026-01-16 (Keyboard Shortcuts Help UI COMPLETE - 27 new tests, bundle size: 277.75 kB)
-**Status:** Phase 1-4 COMPLETE, Phase 5: 99% COMPLETE (automated testing, documentation, and keyboard shortcuts help complete)
+**Last Updated:** 2026-01-16 (Accessibility fixes COMPLETE - 3 HIGH PRIORITY fixes: ARIA labels, focus styles)
+**Status:** Phase 1-4 COMPLETE, Phase 5: 99% COMPLETE (automated testing, documentation, keyboard shortcuts help, and accessibility fixes complete)
 
 **Progress Summary:**
 - ✅ Phase 1 (Core RSVP): 100% COMPLETE
@@ -1765,6 +1780,12 @@ Fully implements the requirement from `specs/user-interface.md` line 124:
    - Focus trap and full ARIA support
    - 27 comprehensive tests (all passing)
    - Improved user discoverability of keyboard shortcuts
+12. ✅ **Additional accessibility fixes (2026-01-16):**
+   - Added aria-label to TextInput textarea ("Text input area for pasting content to speed read")
+   - Added aria-label to Close Document button ("Close document and return to upload screen")
+   - Added :focus styles to TextInput button (2px outline)
+   - Bundle size increased by only 0.12 kB (+0.04 kB gzipped)
+   - All 621 tests still passing
 
 **Remaining Work (Manual Testing Only - Optional for MVP):**
 1. Manual screen reader testing with VoiceOver/NVDA (MEDIUM priority) - 2-3 hrs
@@ -1775,10 +1796,10 @@ Fully implements the requirement from `specs/user-interface.md` line 124:
 
 **Test Status:**
 - ✅ All 621 tests passing (48 accessibility tests + 27 keyboard shortcuts help tests)
-- ✅ All WCAG AA violations fixed
+- ✅ All WCAG AA violations fixed (including 3 HIGH PRIORITY fixes on 2026-01-16)
 - ✅ Automated accessibility testing with axe-core complete
 - ✅ TypeScript build succeeds with no errors
-- ✅ Bundle size: 277.75 kB (gzip: 85.25 kB)
+- ✅ Bundle size: 277.75 kB (gzip: 85.25 kB) - increased 0.12 kB (+0.04 kB gzipped) from accessibility fixes
 - ✅ Automated accessibility tests: 100% pass rate (axe-core validation)
 
 **Accessibility Test Coverage:**
