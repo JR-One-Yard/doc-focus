@@ -6,15 +6,15 @@
 
 The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is now complete:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
 
-**Phase 2 Progress:** P2-1, P2-2, P2-3, P2-4 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State)
+**Phase 2 Progress:** P2-1, P2-2, P2-3, P2-4, P2-5 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State, PDF Parser)
 
 **Build Status:**
-- All 251 tests pass ✅
+- All 280 tests pass ✅
 - TypeScript build succeeds ✅
 - Ready for commit
 
 **Next Milestone:** Continue Phase 2
-- Add PDF/EPUB/DOCX parsers (P2-5, P2-6, P2-7)
+- Add EPUB/DOCX parsers (P2-6, P2-7)
 
 **Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
 
@@ -391,17 +391,39 @@ These tasks block all other work and must be completed sequentially:
   - TypeScript strict mode compilation successful
 - **Spec:** `specs/user-interface.md` (Loading States, lines 107-112)
 
-### P2-5: PDF Parser
+### P2-5: PDF Parser ✅
 **Complexity:** Complex | **Priority:** Medium
 **Files:** `src/parsers/pdf-parser.ts`
 
-- [ ] Implement `parsePdfFile(file: File): Promise<string>`
-- [ ] Use `pdfjs-dist` library
-- [ ] Extract text from all pages in order
-- [ ] Handle multi-page PDFs (concatenate pages)
-- [ ] Basic error handling for corrupted PDFs
-- [ ] Unit tests with sample PDF file
+- [x] Implement `parsePdfFile(file: File): Promise<string>`
+- [x] Use `pdfjs-dist` library
+- [x] Extract text from all pages in order
+- [x] Handle multi-page PDFs (concatenate pages)
+- [x] Basic error handling for corrupted PDFs
+- [x] Unit tests with sample PDF file
 - **Dependencies:** None (can work in parallel with P2-1 through P2-4)
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Created `src/parsers/pdf-parser.ts` with `parsePdfFile()` function
+  - Implemented using `pdfjs-dist` library with proper worker configuration
+  - Worker setup for both browser and Node.js test environments:
+    * Browser: Uses `public/pdf.worker.min.mjs` for production
+    * Node.js tests: Uses `pdfjs-dist/build/pdf.worker.mjs` for test environment
+  - Multi-page PDF support with proper text extraction and page concatenation
+  - Comprehensive error handling for:
+    * Corrupted or invalid PDF files
+    * Empty PDFs (no text content)
+    * PDF parsing failures and exceptions
+  - Created `isPdfFile()` validation function for extension and MIME type checking
+  - Text extraction preserves proper ordering and spacing between pages
+  - Created comprehensive test suite with 29 passing tests covering:
+    * Successful parsing scenarios (single-page, multi-page PDFs)
+    * Text extraction accuracy and page ordering
+    * Error handling (corrupted PDFs, empty PDFs, parsing failures)
+    * File validation (extension and MIME type checking)
+    * Worker configuration in test environment
+  - All 280 tests passing in full suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/content-parser.md` (PDF section, lines 25-30)
 
 ### P2-6: EPUB Parser
