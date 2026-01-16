@@ -2,18 +2,18 @@
 
 ## Project Status Summary
 
-**Current Completion: ~62%**
+**Current Completion: ~65%**
 
 The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is now complete:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
 
 **Phase 2 Progress:** P2-1 through P2-9 are COMPLETE (TXT parser, File Upload UI, File Validation & Error Handling, Loading State, PDF Parser, EPUB Parser, DOCX Parser, Unified Parser Interface, File Info Display)
 
 **Build Status:**
-- All 405 tests pass ✅
+- All 434 tests pass ✅
 - TypeScript build succeeds ✅
 - Ready for commit
 
-**Next Milestone:** Phase 3 - P3-2 (Speed Increment/Decrement Keyboard Shortcuts)
+**Next Milestone:** Phase 3 - P3-3 (Progress Bar Visual)
 
 **Target:** Functional MVP where users can upload a TXT file and read it with RSVP display at variable speeds.
 
@@ -597,15 +597,32 @@ These tasks block all other work and must be completed sequentially:
   - TypeScript strict mode compilation successful
 - **Spec:** `specs/speed-controls.md` (Speed Adjustment, lines 18-25)
 
-### P3-2: Speed Increment/Decrement Keyboard Shortcuts
+### P3-2: Speed Increment/Decrement Keyboard Shortcuts ✅
 **Complexity:** Simple | **Priority:** Medium
 **Files:** Update `src/hooks/useRSVPPlayback.ts` or create `useKeyboardShortcuts.ts`
 
-- [ ] UP arrow: Increase speed by 25 WPM
-- [ ] DOWN arrow: Decrease speed by 25 WPM
-- [ ] Respect MIN/MAX limits
-- [ ] Update speed state and UI
+- [x] UP arrow: Increase speed by 25 WPM
+- [x] DOWN arrow: Decrease speed by 25 WPM
+- [x] Respect MIN/MAX limits
+- [x] Update speed state and UI
 - **Dependencies:** P1-2 (speed control)
+- **Status:** COMPLETED
+- **Completed Work:**
+  - Implemented UP/DOWN arrow keyboard shortcuts in App.tsx
+  - Created `handleIncreaseSpeed()` function: increases speed by 25 WPM
+  - Created `handleDecreaseSpeed()` function: decreases speed by 25 WPM
+  - Speed changes respect MIN_WPM (50) and MAX_WPM (350) limits
+  - Integrated with existing `useKeyboardShortcuts` hook
+  - Speed state and UI update immediately on key press
+  - Created comprehensive test suite in `useKeyboardShortcuts.test.ts` with 29 passing tests covering:
+    * UP arrow increases speed by 25 WPM
+    * DOWN arrow decreases speed by 25 WPM
+    * Speed respects minimum limit (50 WPM)
+    * Speed respects maximum limit (350 WPM)
+    * Keyboard shortcuts only enabled when document is loaded
+    * Integration with all other shortcuts (SPACE, LEFT/RIGHT, ESC)
+  - All 434 tests passing in full suite
+  - TypeScript strict mode compilation successful
 - **Spec:** `specs/speed-controls.md` (Keyboard Shortcuts, lines 44-52)
 
 ### P3-3: Progress Bar (Visual)
@@ -657,9 +674,9 @@ These tasks block all other work and must be completed sequentially:
 **Phase 3 Success Criteria:**
 - ✓ Speed slider and numeric input work together
 - ✓ UP/DOWN arrows adjust speed by 25 WPM increments
-- ✓ Progress bar shows accurate position
-- ✓ Clicking progress bar jumps to that position
-- ✓ Jump to beginning/end works
+- [ ] Progress bar shows accurate position
+- [ ] Clicking progress bar jumps to that position
+- [ ] Jump to beginning/end works
 
 ---
 
@@ -1118,5 +1135,5 @@ These tasks block all other work and must be completed sequentially:
 ---
 
 **Last Updated:** 2026-01-16
-**Status:** Phase 1 COMPLETE, Phase 2 COMPLETE, Phase 3 Progress (P3-1 COMPLETE) - All critical path items, core RSVP reading features, file handling, and speed slider control implemented with 405 passing tests
-**Next Step:** Continue Phase 3 - User Controls Enhancement (P3-2: Speed Increment/Decrement Keyboard Shortcuts)
+**Status:** Phase 1 COMPLETE, Phase 2 COMPLETE, Phase 3 Progress (P3-1, P3-2 COMPLETE) - All critical path items, core RSVP reading features, file handling, speed slider control, and speed keyboard shortcuts implemented with 434 passing tests
+**Next Step:** Continue Phase 3 - User Controls Enhancement (P3-3: Progress Bar Visual)
