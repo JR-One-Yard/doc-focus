@@ -8,26 +8,31 @@
 .file-info {
   background-color: var(--bg-secondary, #2a2a2a);
   border: 1px solid var(--ui-border, #444444);
-  border-radius: 8px;
-  padding: 16px;
-  margin: 16px 0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 0;
   color: var(--text-primary, #f5f5f5);
+  opacity: 0.9;
+  flex-shrink: 0;
 }
 
 .file-info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
 }
 
 .file-info-item {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  gap: 6px;
+  align-items: baseline;
+  white-space: nowrap;
 }
 
 .file-info-label {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary, #b0b0b0);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -35,7 +40,7 @@
 }
 
 .file-info-value {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-primary, #f5f5f5);
   overflow: hidden;
   text-overflow: ellipsis;

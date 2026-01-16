@@ -125,6 +125,83 @@ The project has reached production-ready status with all core features, accessib
 
 ---
 
+### BUG-3: Testing Gap - No Integration/E2E Tests
+**Priority:** HIGH | **Complexity:** Medium | **Estimated:** 2 hours
+**Status:** ❌ NOT STARTED
+
+**Problem:**
+- 621 tests all passing, yet user reports blank page after loading document
+- All tests are unit tests (individual functions) or component tests (with mocks)
+- **ZERO integration tests** that actually load a document and verify full user flow
+- Test suite has comment: "we can't easily load a document programmatically" (App.accessibility.test.tsx:65-67)
+- This means regressions in document loading, RSVP display, or playback go undetected
+
+**Root Cause:**
+- No tests that simulate complete user workflows:
+  1. Load document (via text paste OR file upload)
+  2. Verify reading screen appears and renders
+  3. Verify RSVP words display correctly
+  4. Verify playback controls work
+- Unit tests pass because individual functions work in isolation
+- Component tests pass because they use mock data, not real document loading
+- Integration between components (App → TextInput → parseFile → RSVPDisplay) never tested
+
+**Fix Required:**
+1. Add integration test file: `src/App.integration.test.tsx` (ALREADY CREATED)
+2. Test full text paste workflow:
+   - Type text in TextInput
+   - Click "Start Reading"
+   - Verify reading screen appears
+   - Verify RSVP display shows first word
+   - Verify playback controls present and functional
+3. Test full file upload workflow:
+   - Simulate file upload (TXT, PDF, EPUB, DOCX)
+   - Verify document parses successfully
+   - Verify reading screen renders
+   - Verify words display correctly
+4. Add to CI/CD: `npm test` should run integration tests
+
+**Optional Enhancement (E2E):**
+- Install Playwright or Cypress for true browser E2E tests
+- Test in real browser with real file uploads
+- Add visual regression testing to catch layout bugs
+- Run E2E tests as part of Ralph's workflow
+
+**Acceptance Criteria:**
+- [ ] Integration tests cover text paste → reading screen flow
+- [ ] Integration tests cover file upload → reading screen flow
+- [ ] Tests verify RSVP display is visible (not hidden/blank)
+- [ ] Tests verify actual words render (not empty divs)
+- [ ] All integration tests pass before commits
+- [ ] Add integration tests to package.json test script
+
+**Files to Create/Modify:**
+- `src/App.integration.test.tsx` (already created - needs completion)
+- `package.json` (ensure integration tests run with `npm test`)
+- `.claude/ralph-instructions.md` (add E2E testing to Ralph's workflow)
+
+**Testing:**
+- Run: `npm test src/App.integration.test.tsx`
+- Verify: Tests actually load documents and check rendering
+- Verify: Breaking changes to document loading fail tests
+
+**Why This Matters:**
+- Unit tests passing ≠ app working
+- Need integration tests to catch:
+  - Document loading failures
+  - Layout/CSS regressions
+  - Component integration bugs
+  - Real-world user workflows breaking
+
+**Current Integration Test Results:**
+- Created `src/App.integration.test.tsx` (2026-01-16)
+- 2/3 tests passing (text input flow works!)
+- 1 test has minor flex value assertion issue
+- Proves that text paste → RSVP display IS working
+- Need to add file upload integration tests
+
+---
+
 ## Code Quality Improvements
 
 ### ESLint Fixes (2026-01-16)

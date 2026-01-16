@@ -18,8 +18,8 @@
 }
 
 .rsvp-display {
-  /* Flex-based container - takes available space within parent */
-  flex: 1;
+  /* Grid row 2 - takes available space between progress bar and controls */
+  grid-row: 2;
   width: 100%;
   height: 100%;
 
@@ -37,21 +37,23 @@
 
   /* Position relative for absolute children */
   position: relative;
+
+  /* Ensure word is always on top */
+  z-index: 20;
 }
 
 .rsvp-word-container {
-  /* Absolute center - this ensures OVP letter stays at screen center */
+  /* Fixed anchor point at screen center for OVP positioning */
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
 
-  /* Allow word to expand naturally */
-  width: auto;
-  max-width: 90vw; /* Prevent very long words from overflowing */
+  /* No transform - we want the point at 50%, 50% to be our anchor */
+  width: 0;
+  height: 0;
 
-  /* Centered alignment */
-  text-align: center;
+  /* High z-index to be above everything */
+  z-index: 100;
 }
 
 .rsvp-progress {
