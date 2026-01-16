@@ -375,7 +375,11 @@ function App() {
             <SpeedControl speed={speed} onSpeedChange={handleSpeedChange} />
 
             {/* Close Document */}
-            <button onClick={handleCloseDocument} className="control-button close-button">
+            <button
+              onClick={handleCloseDocument}
+              className="control-button close-button"
+              aria-label="Close document and return to upload screen"
+            >
               Close Document
             </button>
 

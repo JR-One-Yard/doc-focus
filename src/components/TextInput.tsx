@@ -68,6 +68,7 @@ export function TextInput({ onDocumentLoad, disabled = false }: TextInputProps) 
         disabled={disabled}
         data-testid="text-input-textarea"
         rows={10}
+        aria-label="Text input area for pasting content to speed read"
       />
 
       <div className="text-input-footer">

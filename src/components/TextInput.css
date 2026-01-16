@@ -105,6 +105,11 @@
   cursor: not-allowed;
 }
 
+.text-input-button:focus {
+  outline: 2px solid var(--text-ovp);
+  outline-offset: 2px;
+}
+
 .text-input-note {
   padding: var(--spacing-md, 16px);
   background: var(--bg-secondary, #2a2a2a);
