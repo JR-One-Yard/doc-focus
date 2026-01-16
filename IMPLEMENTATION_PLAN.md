@@ -2,12 +2,11 @@
 
 ## Project Status Summary
 
-**Current Completion: ~40%**
+**Current Completion: ~50%**
 
-The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. Phase 1 core features are now functional: text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, and dev server running at localhost:5173.
+The project has solid foundational utilities in place (OVP calculation, speed timing, text parsing) with comprehensive test coverage. Core TypeScript types and basic app structure are now implemented in `App.tsx`. The RSVP display components (RSVPDisplay.tsx and WordDisplay.tsx) are fully implemented with OVP highlighting and comprehensive test coverage. **Phase 1 is now complete:** text input with validation, RSVP display with OVP highlighting, playback timing engine, play/pause/next/previous controls, speed control with warnings, word navigation with keyboard shortcuts, progress display, speed warning modal, and dev server running at localhost:5173.
 
-**Next Milestone:** Build MVP Reading Experience (Phases 1-3)
-- Complete Phase 1 remaining tasks (P1-4, P1-5, P1-6)
+**Next Milestone:** Build MVP Reading Experience (Phases 2-3)
 - Add file upload and basic parsing (Phase 2)
 - Create enhanced speed controls (Phase 3)
 
@@ -177,46 +176,69 @@ These tasks block all other work and must be completed sequentially:
 - **Completion Notes:** Implemented play/pause toggle with previous/next navigation
 - **Spec:** `specs/speed-controls.md` (Playback Controls, lines 32-37)
 
-### P1-4: Word Navigation
+### P1-4: Word Navigation ✅
 **Complexity:** Simple | **Priority:** Medium
 **Files:** Update `PlaybackControls.tsx`
 
-- [ ] Previous word button (calls `previous()` from hook)
-- [ ] Next word button (calls `next()` from hook)
-- [ ] Keyboard shortcuts: LEFT/RIGHT arrows
-- [ ] Works during both playback and pause
+- [x] Previous word button (calls `previous()` from hook)
+- [x] Next word button (calls `next()` from hook)
+- [x] Keyboard shortcuts: LEFT/RIGHT arrows
+- [x] Works during both playback and pause
 - **Dependencies:** CP-3 (navigation methods in hook)
+- **Status:** COMPLETED
+- **Completion Notes:**
+  - Created useKeyboardShortcuts custom hook in `src/hooks/useKeyboardShortcuts.ts`
+  - Implemented keyboard shortcuts: SPACE (play/pause), LEFT/RIGHT arrows (navigate), UP/DOWN arrows (speed adjust), ESC (close)
+  - Integrated into App.tsx with proper event handling
+  - Shortcuts only enabled when document is loaded
+  - Previous/Next word buttons already implemented in PlaybackControls component
 - **Spec:** `specs/speed-controls.md` (Navigation Controls, lines 38-42)
 
-### P1-5: Basic Progress Display
+### P1-5: Basic Progress Display ✅
 **Complexity:** Simple | **Priority:** Medium
 **Files:** `src/components/ProgressDisplay.tsx`
 
-- [ ] Display "Word X of Y" counter
-- [ ] Calculate using `currentWordIndex` and `totalWords`
-- [ ] Update in real-time during playback
+- [x] Display "Word X of Y" counter
+- [x] Calculate using `currentWordIndex` and `totalWords`
+- [x] Update in real-time during playback
 - **Dependencies:** CP-3 (word index tracking)
+- **Status:** COMPLETED
+- **Completion Notes:**
+  - Created ProgressDisplay component in `src/components/ProgressDisplay.tsx`
+  - Displays "Word X of Y" counter with percentage
+  - Real-time updates during playback
+  - Integrated into reading screen in App.tsx
 - **Spec:** `specs/progress-tracking.md` (Position Tracking, lines 20-24)
 
-### P1-6: Speed Warning Modal
+### P1-6: Speed Warning Modal ✅
 **Complexity:** Simple | **Priority:** Medium
 **Files:** `src/components/SpeedWarning.tsx`
 
-- [ ] Create modal/banner component
-- [ ] Show when `shouldShowSpeedWarning(speed)` returns true
-- [ ] Display warning message (from spec)
-- [ ] Dismissible but show again when speed exceeds 300 WPM
-- [ ] Store dismissed state in component state (future: localStorage)
+- [x] Create modal/banner component
+- [x] Show when `shouldShowSpeedWarning(speed)` returns true
+- [x] Display warning message (from spec)
+- [x] Dismissible but show again when speed exceeds 300 WPM
+- [x] Store dismissed state in component state (future: localStorage)
 - **Dependencies:** P1-2 (speed control)
+- **Status:** COMPLETED
+- **Completion Notes:**
+  - Created SpeedWarning modal component in `src/components/SpeedWarning.tsx`
+  - Shows detailed warning message when speed > 300 WPM
+  - Dismissible with state management
+  - Reappears if speed increases again after dismissal
+  - Full warning text from spec implemented
+  - Integrated into App.tsx with proper state handling
 - **Spec:** `specs/speed-controls.md` (Warning Messages, lines 106-118)
 
-**Phase 1 Success Criteria:**
+**Phase 1 Success Criteria:** ✅ ALL COMPLETE
 - ✓ User can paste text and click "Start Reading"
 - ✓ Words display one at a time with red OVP highlighting
 - ✓ Play/pause works with button and SPACE key
 - ✓ Speed can be adjusted (50-350 WPM)
 - ✓ Warning appears at >300 WPM
 - ✓ Left/Right arrows navigate words
+- ✓ Progress display shows "Word X of Y" with percentage
+- ✓ Full keyboard shortcuts implemented (SPACE, arrows, ESC)
 
 ---
 
@@ -883,5 +905,5 @@ These tasks block all other work and must be completed sequentially:
 ---
 
 **Last Updated:** 2026-01-16
-**Status:** Critical Path Completed (CP-1, CP-2, CP-3) + Phase 1 Core Features (P1-1, P1-2, P1-3)
-**Next Step:** Continue Phase 1 - Implement P1-4 (Word Navigation) and P1-5 (Basic Progress Display)
+**Status:** Phase 1 COMPLETE - All critical path items and core RSVP reading features implemented
+**Next Step:** Begin Phase 2 - File Handling (P2-1: TXT File Parser)

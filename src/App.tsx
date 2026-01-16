@@ -3,8 +3,11 @@ import './App.css'
 import { AppState, SPEED_LIMITS, ParsedDocument } from './types'
 import { RSVPDisplay } from './components/RSVPDisplay'
 import { TextInput } from './components/TextInput'
+import { ProgressDisplay } from './components/ProgressDisplay'
+import { SpeedWarning } from './components/SpeedWarning'
 import { useRSVPPlayback } from './hooks/useRSVPPlayback'
-import { isValidWPM, shouldShowSpeedWarning } from './lib/speed-timer'
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
+import { isValidWPM } from './lib/speed-timer'
 
 /**
  * FastReader - Speed Reading Application
@@ -50,6 +53,37 @@ function App() {
     }
   }
 
+  // Handle speed increment/decrement (for keyboard shortcuts)
+  const handleIncreaseSpeed = () => {
+    const newSpeed = Math.min(speed + 25, SPEED_LIMITS.MAX_WPM)
+    setSpeed(newSpeed)
+  }
+
+  const handleDecreaseSpeed = () => {
+    const newSpeed = Math.max(speed - 25, SPEED_LIMITS.MIN_WPM)
+    setSpeed(newSpeed)
+  }
+
+  // Handle play/pause toggle (for keyboard shortcuts)
+  const handleTogglePlayPause = () => {
+    if (playback.isPlaying) {
+      playback.pause()
+    } else {
+      playback.play()
+    }
+  }
+
+  // Keyboard shortcuts (only enabled when document is loaded)
+  useKeyboardShortcuts({
+    onTogglePlayPause: handleTogglePlayPause,
+    onPrevious: playback.previous,
+    onNext: playback.next,
+    onIncreaseSpeed: handleIncreaseSpeed,
+    onDecreaseSpeed: handleDecreaseSpeed,
+    onClose: handleCloseDocument,
+    enabled: hasDocument,
+  })
+
   return (
     <div className="app">
       {!hasDocument ? (
@@ -72,6 +106,12 @@ function App() {
       ) : (
         // Reading Screen - shown when document is loaded
         <div className="reading-screen">
+          {/* Progress Display */}
+          <ProgressDisplay
+            currentIndex={playback.currentIndex}
+            totalWords={currentDocument.totalWords}
+          />
+
           {/* RSVP Display with OVP highlighting */}
           <RSVPDisplay
             word={currentDocument.words[playback.currentIndex] || ''}
@@ -122,9 +162,6 @@ function App() {
                 onChange={(e) => handleSpeedChange(Number(e.target.value))}
                 className="speed-input"
               />
-              {shouldShowSpeedWarning(speed) && (
-                <span className="speed-warning">⚠️ High speed may reduce comprehension</span>
-              )}
             </div>
 
             {/* Close Document */}
@@ -132,6 +169,9 @@ function App() {
               Close Document
             </button>
           </div>
+
+          {/* Speed Warning Modal (overlay) */}
+          <SpeedWarning speed={speed} />
         </div>
       )}
     </div>
