@@ -10,6 +10,7 @@ import { ErrorMessage } from './components/ErrorMessage'
 import { ProgressDisplay } from './components/ProgressDisplay'
 import { SpeedWarning } from './components/SpeedWarning'
 import { FileInfo } from './components/FileInfo'
+import { SpeedControl } from './components/SpeedControl'
 import { useRSVPPlayback } from './hooks/useRSVPPlayback'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { isValidWPM } from './lib/speed-timer'
@@ -238,20 +239,8 @@ function App() {
               </button>
             </div>
 
-            {/* Speed Control */}
-            <div className="speed-control">
-              <label htmlFor="speed-input">Speed (WPM):</label>
-              <input
-                id="speed-input"
-                type="number"
-                min={SPEED_LIMITS.MIN_WPM}
-                max={SPEED_LIMITS.MAX_WPM}
-                step={25}
-                value={speed}
-                onChange={(e) => handleSpeedChange(Number(e.target.value))}
-                className="speed-input"
-              />
-            </div>
+            {/* Speed Control (P3-1) */}
+            <SpeedControl speed={speed} onSpeedChange={handleSpeedChange} />
 
             {/* Close Document */}
             <button onClick={handleCloseDocument} className="control-button close-button">

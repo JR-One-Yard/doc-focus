@@ -217,35 +217,7 @@ body {
   opacity: 0.9;
 }
 
-/* Speed Control */
-.speed-control {
-  display: flex;
-  gap: var(--spacing-md);
-  align-items: center;
-  font-size: var(--font-sm);
-}
-
-.speed-control label {
-  color: var(--text-secondary);
-}
-
-.speed-input {
-  width: 80px;
-  padding: var(--spacing-sm);
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--ui-border);
-  border-radius: var(--radius);
-  font-size: var(--font-md);
-  font-family: var(--font-family);
-  text-align: center;
-}
-
-.speed-input:focus {
-  outline: none;
-  border-color: var(--ui-focus);
-}
-
+/* Speed warning text (if needed for inline warnings) */
 .speed-warning {
   color: var(--status-warning);
   font-size: var(--font-xs);

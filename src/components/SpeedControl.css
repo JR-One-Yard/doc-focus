@@ -1,0 +1,239 @@
+/**
+ * SpeedControl Component Styles
+ * Dark theme styling for speed slider and numeric input
+ */
+
+.speed-control-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+  max-width: 400px;
+}
+
+.speed-label {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+
+.speed-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* Range Slider Styling */
+.speed-slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.speed-slider:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Webkit Slider Thumb */
+.speed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--text-ovp);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.speed-slider::-webkit-slider-thumb:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.4);
+}
+
+.speed-slider::-webkit-slider-thumb:active:not(:disabled) {
+  transform: scale(1.05);
+}
+
+/* Firefox Slider Thumb */
+.speed-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--text-ovp);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.speed-slider::-moz-range-thumb:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.4);
+}
+
+.speed-slider::-moz-range-thumb:active:not(:disabled) {
+  transform: scale(1.05);
+}
+
+/* Slider Track (fill effect) */
+.speed-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  background: linear-gradient(
+    to right,
+    var(--text-ovp) 0%,
+    var(--text-ovp) calc((var(--slider-value, 50) - 50) / 300 * 100%),
+    var(--bg-secondary) calc((var(--slider-value, 50) - 50) / 300 * 100%),
+    var(--bg-secondary) 100%
+  );
+  border-radius: 3px;
+}
+
+.speed-slider::-moz-range-track {
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.speed-slider::-moz-range-progress {
+  height: 6px;
+  background: var(--text-ovp);
+  border-radius: 3px;
+}
+
+/* Focus states for accessibility */
+.speed-slider:focus {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+
+.speed-slider:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
+}
+
+.speed-slider:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
+}
+
+/* Numeric Input */
+.speed-input {
+  width: 70px;
+  padding: var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  font-size: var(--font-md);
+  font-family: var(--font-family);
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.speed-input:focus {
+  outline: none;
+  border-color: var(--text-ovp);
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
+}
+
+.speed-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Remove spinner arrows in number input */
+.speed-input::-webkit-inner-spin-button,
+.speed-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.speed-input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* WPM Unit Label */
+.speed-unit {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  min-width: 40px;
+}
+
+/* Speed Indicators (min, default, max) */
+.speed-indicators {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--spacing-xs);
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.speed-indicator-min,
+.speed-indicator-default,
+.speed-indicator-max {
+  position: relative;
+  opacity: 0.6;
+}
+
+.speed-indicator-default {
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .speed-control-container {
+    max-width: 100%;
+  }
+
+  .speed-controls {
+    gap: var(--spacing-sm);
+  }
+
+  .speed-input {
+    width: 60px;
+    font-size: var(--font-sm);
+  }
+
+  .speed-slider {
+    min-width: 120px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .speed-control-container {
+    max-width: 350px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .speed-slider::-webkit-slider-thumb,
+  .speed-slider::-moz-range-thumb {
+    border-width: 3px;
+  }
+
+  .speed-input:focus {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .speed-slider,
+  .speed-slider::-webkit-slider-thumb,
+  .speed-slider::-moz-range-thumb,
+  .speed-input {
+    transition: none;
+  }
+}
