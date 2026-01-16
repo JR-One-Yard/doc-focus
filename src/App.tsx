@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import type { ParsedDocument } from './types'
 import { SPEED_LIMITS } from './types'
@@ -17,6 +17,12 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { isValidWPM } from './lib/speed-timer'
 import { parseTxtFile } from './parsers/txt-parser'
 import { parseTextToWords, countWords } from './lib/text-parser'
+import {
+  generateDocumentId,
+  saveReadingPosition,
+  loadReadingPosition,
+  cleanupOldPositions,
+} from './utils/storage'
 
 /**
  * FastReader - Speed Reading Application
@@ -32,17 +38,81 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [loadingFileName, setLoadingFileName] = useState<string>('')
 
+  // Track document ID for storage
+  const currentDocumentId = useRef<string | null>(null)
+
+  // Debounce timer for auto-save
+  const saveTimerRef = useRef<NodeJS.Timeout | null>(null)
+
   // Use RSVP playback hook (only when we have a document)
   const playback = useRSVPPlayback({
     words: currentDocument?.words || [],
     speed,
     onComplete: () => {
-      // Auto-stop when playback completes
+      // Auto-stop when playback completes and save position
+      if (currentDocument && currentDocumentId.current) {
+        saveCurrentPosition()
+      }
     },
   })
 
   // Determine which screen to show
   const hasDocument = currentDocument !== null
+
+  // P4-6: Cleanup old positions on app initialization
+  useEffect(() => {
+    cleanupOldPositions()
+  }, [])
+
+  // Helper function to save current position
+  const saveCurrentPosition = () => {
+    if (!currentDocument || !currentDocumentId.current) return
+
+    saveReadingPosition({
+      documentId: currentDocumentId.current,
+      fileName: currentDocument.fileName,
+      currentWordIndex: playback.currentIndex,
+      totalWords: currentDocument.totalWords,
+      timestamp: Date.now(),
+      speed,
+    })
+  }
+
+  // P4-3, P4-4: Auto-save position during reading (debounced)
+  useEffect(() => {
+    if (!currentDocument || !playback.isPlaying) return
+
+    // Clear existing timer
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current)
+    }
+
+    // Save position every 5 seconds during playback
+    saveTimerRef.current = setTimeout(() => {
+      saveCurrentPosition()
+    }, 5000)
+
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current)
+      }
+    }
+  }, [currentDocument, playback.currentIndex, playback.isPlaying, speed])
+
+  // P4-3: Save position on browser close/reload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (currentDocument && currentDocumentId.current) {
+        saveCurrentPosition()
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [currentDocument, playback.currentIndex, speed])
 
   // Handle document load from TextInput
   const handleDocumentLoad = (document: ParsedDocument) => {
@@ -82,6 +152,19 @@ function App() {
         fileSize: file.size,
       }
 
+      // P4-2: Generate document ID for storage
+      const documentId = generateDocumentId(file.name, file.size)
+      currentDocumentId.current = documentId
+
+      // P4-5: Load saved position if it exists
+      const savedPosition = loadReadingPosition(documentId)
+
+      if (savedPosition) {
+        // Restore saved position
+        playback.jumpTo(savedPosition.currentWordIndex)
+        setSpeed(savedPosition.speed)
+      }
+
       setCurrentDocument(document)
       setError(null)
     } catch (err) {
@@ -110,8 +193,14 @@ function App() {
 
   // Handle close document
   const handleCloseDocument = () => {
+    // P4-3: Save position before closing
+    if (currentDocument && currentDocumentId.current) {
+      saveCurrentPosition()
+    }
+
     playback.pause()
     setCurrentDocument(null)
+    currentDocumentId.current = null
   }
 
   // Handle speed change
@@ -136,6 +225,10 @@ function App() {
   const handleTogglePlayPause = () => {
     if (playback.isPlaying) {
       playback.pause()
+      // P4-3: Save position when pausing
+      if (currentDocument && currentDocumentId.current) {
+        saveCurrentPosition()
+      }
     } else {
       playback.play()
     }
@@ -231,7 +324,17 @@ function App() {
               </button>
 
               <button
-                onClick={playback.isPlaying ? playback.pause : playback.play}
+                onClick={() => {
+                  if (playback.isPlaying) {
+                    playback.pause()
+                    // P4-3: Save position when pausing
+                    if (currentDocument && currentDocumentId.current) {
+                      saveCurrentPosition()
+                    }
+                  } else {
+                    playback.play()
+                  }
+                }}
                 className="control-button play-button"
               >
                 {playback.isPlaying ? '⏸ Pause' : '▶ Play'}
