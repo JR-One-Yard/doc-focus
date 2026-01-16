@@ -23,23 +23,15 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
   describe('WordDisplay Component', () => {
     it('should not have any accessibility violations', async () => {
       const { container } = render(
-        <WordDisplay
-          beforeOVP="Hel"
-          ovpLetter="l"
-          afterOVP="o"
-        />
+        <WordDisplay word="Hello" />
       )
       const results = await axe(container)
       expect(results).toHaveNoViolations()
     })
 
-    it('should not have violations with empty word parts', async () => {
+    it('should not have violations with single letter word', async () => {
       const { container } = render(
-        <WordDisplay
-          beforeOVP=""
-          ovpLetter="I"
-          afterOVP=""
-        />
+        <WordDisplay word="I" />
       )
       const results = await axe(container)
       expect(results).toHaveNoViolations()
@@ -89,7 +81,7 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
       const { container } = render(
         <ErrorMessage
           message="This is an error message"
-          onDismiss={() => {}}
+          onRetry={() => {}}
         />
       )
       const results = await axe(container)
@@ -100,7 +92,7 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
       const { container } = render(
         <ErrorMessage
           message="Unsupported file type. Please upload a .txt, .pdf, .epub, or .docx file."
-          onDismiss={() => {}}
+          onRetry={() => {}}
         />
       )
       const results = await axe(container)
@@ -263,7 +255,7 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
     it('should not have any accessibility violations when shown', async () => {
       const { container } = render(
         <SpeedWarning
-          show={true}
+          speed={325}
           onDismiss={() => {}}
         />
       )
@@ -293,12 +285,12 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
       }
 
       // All text colors meet WCAG AA 4.5:1 requirement
-      Object.entries(textColors).forEach(([combination, ratio]) => {
+      Object.entries(textColors).forEach(([_combination, ratio]) => {
         expect(ratio).toBeGreaterThanOrEqual(4.5) // WCAG AA for normal text
       })
 
       // All UI component colors meet WCAG AA 3:1 requirement
-      Object.entries(uiColors).forEach(([combination, ratio]) => {
+      Object.entries(uiColors).forEach(([_combination, ratio]) => {
         expect(ratio).toBeGreaterThanOrEqual(3.0) // WCAG AA for UI components
       })
     })
@@ -322,7 +314,7 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
       }
 
       // All button touch targets meet or exceed 44x44px WCAG guideline
-      Object.entries(buttonTargets).forEach(([element, size]) => {
+      Object.entries(buttonTargets).forEach(([_element, size]) => {
         expect(size.height).toBeGreaterThanOrEqual(44)
         if ('width' in size && typeof size.width === 'number') {
           expect(size.width).toBeGreaterThanOrEqual(44)
@@ -330,7 +322,7 @@ describe('Accessibility Tests - WCAG AA Compliance', () => {
       })
 
       // Full-width elements provide adequate touch targets through their width
-      Object.entries(fullWidthTargets).forEach(([element, config]) => {
+      Object.entries(fullWidthTargets).forEach(([_element, config]) => {
         expect(config.height).toBeGreaterThan(0) // Verify they have a defined height
       })
     })

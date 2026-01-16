@@ -9,7 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import App from './App';
-import { expectNoA11yViolations, axeRulePresets, disableRules } from './test-utils/accessibility';
+import { expectNoA11yViolations, axeRulePresets } from './test-utils/accessibility';
 
 describe('App Accessibility (Upload Screen)', () => {
   it('should have no accessibility violations on initial load', async () => {

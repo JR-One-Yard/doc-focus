@@ -1,0 +1,364 @@
+/* KeyboardShortcutsHelp Component Styles */
+
+/* Modal overlay - Full screen semi-transparent background */
+.keyboard-help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--spacing-md, 16px);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Fade-in animation for overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal container */
+.keyboard-help-modal {
+  background-color: var(--bg-secondary, #2a2a2a);
+  border: 1px solid var(--ui-border, #444444);
+  border-radius: var(--radius, 8px);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Slide-in animation for modal */
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal header */
+.keyboard-help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg, 24px) var(--spacing-lg, 24px) var(--spacing-md, 16px);
+  border-bottom: 1px solid var(--ui-border, #444444);
+  flex-shrink: 0;
+}
+
+.keyboard-help-header h2 {
+  margin: 0;
+  font-size: var(--font-lg, 18px);
+  font-weight: 600;
+  color: var(--text-primary, #f5f5f5);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+/* Close button (× in header) */
+.keyboard-help-header .close-button {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #b0b0b0);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.keyboard-help-header .close-button:hover {
+  background-color: var(--ui-hover, #555555);
+  color: var(--text-primary, #f5f5f5);
+}
+
+.keyboard-help-header .close-button:focus {
+  outline: 2px solid var(--ui-focus, #666666);
+  outline-offset: 2px;
+}
+
+/* Modal content - scrollable */
+.keyboard-help-content {
+  padding: var(--spacing-lg, 24px);
+  color: var(--text-primary, #f5f5f5);
+  font-size: var(--font-md, 16px);
+  line-height: 1.6;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Introduction paragraph */
+.keyboard-help-intro {
+  margin: 0 0 var(--spacing-lg, 24px) 0;
+  color: var(--text-secondary, #b0b0b0);
+  font-size: var(--font-sm, 14px);
+}
+
+/* Shortcut section */
+.keyboard-help-section {
+  margin-bottom: var(--spacing-lg, 24px);
+}
+
+.keyboard-help-section:last-of-type {
+  margin-bottom: var(--spacing-md, 16px);
+}
+
+.keyboard-help-section-title {
+  margin: 0 0 var(--spacing-sm, 8px) 0;
+  font-size: var(--font-md, 16px);
+  font-weight: 600;
+  color: var(--text-primary, #f5f5f5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: var(--font-sm, 14px);
+  opacity: 0.8;
+}
+
+/* Keyboard shortcuts table */
+.keyboard-shortcuts-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 var(--spacing-xs, 4px);
+}
+
+.keyboard-shortcuts-table tbody tr {
+  background-color: rgba(255, 255, 255, 0.02);
+  transition: background-color 0.2s ease;
+}
+
+.keyboard-shortcuts-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.keyboard-shortcuts-table td {
+  padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+  vertical-align: middle;
+}
+
+/* Keyboard key styling */
+.keyboard-key {
+  width: 140px;
+  text-align: left;
+}
+
+.keyboard-key kbd {
+  display: inline-block;
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  background-color: var(--bg-primary, #1a1a1a);
+  border: 1px solid var(--ui-border, #444444);
+  border-radius: 4px;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  font-size: var(--font-sm, 14px);
+  font-weight: 600;
+  color: var(--text-primary, #f5f5f5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+}
+
+/* Description text */
+.keyboard-description {
+  color: var(--text-primary, #f5f5f5);
+  font-size: var(--font-md, 16px);
+}
+
+/* Help note at bottom */
+.keyboard-help-note {
+  margin-top: var(--spacing-lg, 24px);
+  padding: var(--spacing-md, 16px);
+  background-color: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid var(--status-success, #4caf50);
+  border-radius: 4px;
+  font-size: var(--font-sm, 14px);
+  line-height: 1.5;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+.keyboard-help-note strong {
+  color: var(--status-success, #4caf50);
+  font-weight: 600;
+}
+
+/* Modal footer */
+.keyboard-help-footer {
+  padding: var(--spacing-md, 16px) var(--spacing-lg, 24px) var(--spacing-lg, 24px);
+  border-top: 1px solid var(--ui-border, #444444);
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Close action button */
+.keyboard-help-footer .close-action-button {
+  background-color: var(--status-success, #4caf50);
+  color: #1a1a1a;
+  border: none;
+  border-radius: var(--radius, 8px);
+  padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
+  font-size: var(--font-md, 16px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.keyboard-help-footer .close-action-button:hover {
+  background-color: #5cb860;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.keyboard-help-footer .close-action-button:active {
+  transform: translateY(0);
+}
+
+.keyboard-help-footer .close-action-button:focus {
+  outline: 2px solid var(--ui-focus, #666666);
+  outline-offset: 2px;
+}
+
+/* Responsive design - Mobile */
+@media (max-width: 768px) {
+  .keyboard-help-overlay {
+    padding: var(--spacing-sm, 8px);
+  }
+
+  .keyboard-help-modal {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+
+  .keyboard-help-header {
+    padding: var(--spacing-md, 16px);
+  }
+
+  .keyboard-help-header h2 {
+    font-size: var(--font-md, 16px);
+  }
+
+  .keyboard-help-content {
+    padding: var(--spacing-md, 16px);
+    font-size: var(--font-sm, 14px);
+  }
+
+  .keyboard-help-intro {
+    font-size: 13px;
+  }
+
+  .keyboard-shortcuts-table td {
+    padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  }
+
+  .keyboard-key {
+    width: 110px;
+  }
+
+  .keyboard-key kbd {
+    font-size: 13px;
+    padding: 3px 6px;
+  }
+
+  .keyboard-description {
+    font-size: var(--font-sm, 14px);
+  }
+
+  .keyboard-help-section-title {
+    font-size: 13px;
+  }
+
+  .keyboard-help-note {
+    font-size: 13px;
+    padding: var(--spacing-sm, 8px);
+  }
+
+  .keyboard-help-footer {
+    padding: var(--spacing-md, 16px);
+  }
+
+  .keyboard-help-footer .close-action-button {
+    width: 100%;
+  }
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .keyboard-help-overlay,
+  .keyboard-help-modal,
+  .keyboard-help-header .close-button,
+  .keyboard-help-footer .close-action-button,
+  .keyboard-shortcuts-table tbody tr {
+    animation: none;
+    transition: none;
+  }
+
+  .keyboard-help-footer .close-action-button:hover {
+    transform: none;
+  }
+}
+
+/* Accessibility - High contrast mode */
+@media (prefers-contrast: high) {
+  .keyboard-help-modal {
+    border: 2px solid var(--text-primary, #f5f5f5);
+  }
+
+  .keyboard-help-header,
+  .keyboard-help-footer {
+    border-color: var(--text-primary, #f5f5f5);
+  }
+
+  .keyboard-key kbd {
+    border: 2px solid var(--text-primary, #f5f5f5);
+  }
+
+  .keyboard-help-header .close-button:focus,
+  .keyboard-help-footer .close-action-button:focus {
+    outline-width: 3px;
+  }
+
+  .keyboard-help-note {
+    border-left-width: 4px;
+  }
+}
+
+/* Custom scrollbar for content area */
+.keyboard-help-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.keyboard-help-content::-webkit-scrollbar-track {
+  background: var(--bg-primary, #1a1a1a);
+  border-radius: 4px;
+}
+
+.keyboard-help-content::-webkit-scrollbar-thumb {
+  background: var(--ui-border, #444444);
+  border-radius: 4px;
+}
+
+.keyboard-help-content::-webkit-scrollbar-thumb:hover {
+  background: var(--ui-hover, #555555);
+}

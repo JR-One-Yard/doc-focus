@@ -5,7 +5,7 @@
  */
 
 import { type RenderResult } from '@testing-library/react';
-import { axe, type AxeResults, toHaveNoViolations } from 'jest-axe';
+import { axe, toHaveNoViolations } from 'jest-axe';
 import { expect } from 'vitest';
 
 // Extend Vitest's expect with jest-axe matchers
@@ -16,7 +16,7 @@ expect.extend(toHaveNoViolations);
  *
  * @param container - The container element from @testing-library/react render
  * @param options - Optional axe configuration options
- * @returns Promise<AxeResults> - The results of the accessibility scan
+ * @returns Promise - The results of the accessibility scan
  *
  * @example
  * const { container } = render(<MyComponent />);
@@ -29,7 +29,7 @@ export async function runAxe(
     rules?: Record<string, { enabled: boolean }>;
     runOnly?: { type: 'tag' | 'rule'; values: string[] } | string[];
   }
-): Promise<AxeResults> {
+): Promise<any> {
   // Handle runOnly parameter - can be either an array or an object
   let runOnlyConfig;
   if (options?.runOnly) {
