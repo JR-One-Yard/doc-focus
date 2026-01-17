@@ -1,5 +1,55 @@
 # FastReader - Speed Reading Application
 
+## Overview
+
+**FastReader** is a modern, scientifically-grounded speed reading application that helps you read faster while maintaining comprehension. In a world of information overload, FastReader uses proven cognitive science techniques to help you process text more efficiently.
+
+### What It Does
+
+FastReader uses **RSVP (Rapid Serial Visual Presentation)** technology combined with **OVP (Optimal Viewing Position)** highlighting to eliminate wasted eye movement and optimize word recognition. Words appear one at a time at a fixed position on screen, with the optimal letter highlighted in red to guide your eye's natural fixation point. This allows you to read 2-3x faster than traditional reading while maintaining comprehension for appropriate content types.
+
+**Key capabilities:**
+- Read TXT, PDF, EPUB, and DOCX files at speeds from 50-350 WPM
+- Resume exactly where you left off across browser sessions
+- Fully keyboard-accessible for hands-free reading
+- Dark theme optimized for extended reading sessions
+- Built-in speed warnings based on scientific comprehension research
+
+### Who It's For
+
+FastReader is designed for anyone dealing with high-volume reading demands:
+
+- **Busy Professionals**: Quickly process emails, reports, and documentation
+- **Students**: Skim course materials and review notes efficiently
+- **Researchers**: Initial review of papers before deep reading
+- **Lifelong Learners**: Get through reading lists faster
+- **Knowledge Workers**: Handle information overload more effectively
+
+**Best used for:**
+- Skimming routine documents and emails
+- Re-reading familiar material
+- Initial review before detailed study
+- High-volume, low-complexity content
+
+**Not recommended for:**
+- Academic study requiring deep retention
+- Complex technical documentation
+- Materials needing careful analysis
+
+### Development Approach
+
+FastReader was built using a unique **autonomous AI-driven development workflow** called **Ralph Wiggum**, which emphasizes:
+
+- **Scientific rigor**: Features grounded in cognitive psychology research
+- **Accessibility-first**: WCAG 2.1 AA compliance with 48 automated accessibility tests
+- **Comprehensive testing**: 594+ tests ensuring reliability and correctness
+- **Transparent limitations**: Honest about speed reading trade-offs based on scientific evidence
+- **Iterative refinement**: Continuous improvement through user testing and feedback
+
+The entire codebase was developed using Claude Code with systematic planning, implementation, and validation phases documented in `IMPLEMENTATION_PLAN.md`. This approach enabled rapid development while maintaining high code quality, comprehensive test coverage, and accessibility standards.
+
+---
+
 FastReader is a modern speed reading application that uses RSVP (Rapid Serial Visual Presentation) combined with OVP (Optimal Viewing Position) highlighting to help users read faster while maintaining comprehension.
 
 ## Features
