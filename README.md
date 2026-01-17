@@ -1,72 +1,68 @@
-# FastReader - Speed Reading Application
+# FastReader - Focused Reading, One Word at a Time
 
 ## Overview
 
-**FastReader** is a modern, scientifically-grounded speed reading application that helps you read faster while maintaining comprehension. In a world of information overload, FastReader uses proven cognitive science techniques to help you process text more efficiently.
+**FastReader** is a focused, distraction-free reading application that helps you lock in and commit to reading word by word. In a world full of distractions, endless scrolling, and eye strain from jumping across pages, FastReader lets you upload any document and read it with complete focus—one word at a time.
 
 ### What It Does
 
-FastReader uses **RSVP (Rapid Serial Visual Presentation)** technology combined with **OVP (Optimal Viewing Position)** highlighting to eliminate wasted eye movement and optimize word recognition. Words appear one at a time at a fixed position on screen, with the optimal letter highlighted in red to guide your eye's natural fixation point. This allows you to read 2-3x faster than traditional reading while maintaining comprehension for appropriate content types.
+FastReader eliminates distractions by presenting words **one at a time** at a **fixed position** on screen. No more jumping around the page. No more getting distracted by other text. No more eye strain from scanning back and forth. Just you and the current word, allowing you to **lock in** and give your full attention to what you're reading.
+
+The app uses **RSVP (Rapid Serial Visual Presentation)** technology with **OVP (Optimal Viewing Position)** highlighting—a red letter that marks where your eye should naturally focus within each word. This fixed focal point reduces eye movement and strain, helping you maintain concentration throughout your reading session.
 
 **Key capabilities:**
-- Read TXT, PDF, EPUB, and DOCX files at speeds from 50-350 WPM
+- Read TXT, PDF, EPUB, and DOCX files with complete focus
+- Adjust reading pace from 50-350 WPM to match your natural rhythm
 - Resume exactly where you left off across browser sessions
-- Fully keyboard-accessible for hands-free reading
-- Dark theme optimized for extended reading sessions
-- Built-in speed warnings based on scientific comprehension research
+- Fully keyboard-controlled for hands-free reading
+- Dark theme optimized for extended reading sessions with minimal eye strain
 
 ### Who It's For
 
-FastReader is designed for anyone dealing with high-volume reading demands:
+FastReader is designed for anyone who wants to commit to focused, distraction-free reading:
 
-- **Busy Professionals**: Quickly process emails, reports, and documentation
-- **Students**: Skim course materials and review notes efficiently
-- **Researchers**: Initial review of papers before deep reading
-- **Lifelong Learners**: Get through reading lists faster
-- **Knowledge Workers**: Handle information overload more effectively
+- **Deep Readers**: Eliminate distractions and lock in on the text
+- **Students**: Focus completely on course materials without wandering eyes
+- **Professionals**: Process documents with full attention, one word at a time
+- **Knowledge Seekers**: Commit to reading without the temptation to skim or jump around
+- **Anyone Experiencing Reading Fatigue**: Reduce eye strain from constant page scanning
 
-**Best used for:**
-- Skimming routine documents and emails
-- Re-reading familiar material
-- Initial review before detailed study
-- High-volume, low-complexity content
-
-**Not recommended for:**
-- Academic study requiring deep retention
-- Complex technical documentation
-- Materials needing careful analysis
+**Perfect for:**
+- Reading when you want to commit and focus completely
+- Reducing eye strain from traditional page-based reading
+- Eliminating the distraction of seeing entire paragraphs at once
+- Training yourself to stay present with each word
+- Sessions where you want to lock in without interruption
 
 ### Development Approach
 
 FastReader was built using a unique **autonomous AI-driven development workflow** called **Ralph Wiggum**, which emphasizes:
 
 - **Scientific rigor**: Features grounded in cognitive psychology research
-- **Accessibility-first**: WCAG 2.1 AA compliance with 48 automated accessibility tests
+- **User-focused design**: Clean, distraction-free interface with minimal UI
 - **Comprehensive testing**: 594+ tests ensuring reliability and correctness
-- **Transparent limitations**: Honest about speed reading trade-offs based on scientific evidence
 - **Iterative refinement**: Continuous improvement through user testing and feedback
 
-The entire codebase was developed using Claude Code with systematic planning, implementation, and validation phases documented in `IMPLEMENTATION_PLAN.md`. This approach enabled rapid development while maintaining high code quality, comprehensive test coverage, and accessibility standards.
+The entire codebase was developed using Claude Code with systematic planning, implementation, and validation phases documented in `IMPLEMENTATION_PLAN.md`. This approach enabled rapid development while maintaining high code quality and comprehensive test coverage.
 
 ---
 
-FastReader is a modern speed reading application that uses RSVP (Rapid Serial Visual Presentation) combined with OVP (Optimal Viewing Position) highlighting to help users read faster while maintaining comprehension.
+FastReader is a focused, distraction-free reading application that uses RSVP (Rapid Serial Visual Presentation) combined with OVP (Optimal Viewing Position) highlighting to help you lock in and commit to reading one word at a time.
 
 ## Features
 
 ### Core Reading Experience
-- **RSVP Display**: Words appear one at a time at a fixed position, eliminating eye movement
-- **OVP Highlighting**: Red highlighting of the optimal viewing position (30-35% into each word) for faster recognition
-- **Variable Speed Control**: Adjust reading speed from 50 to 350 WPM
+- **RSVP Display**: Words appear one at a time at a fixed position—no page jumping, just focus
+- **OVP Highlighting**: Red highlighting marks the optimal focal point within each word, reducing eye strain
+- **Adjustable Pace**: Set your reading pace from 50 to 350 WPM to match your natural rhythm
 - **Multiple File Formats**: Upload and read TXT, PDF, EPUB, and DOCX files
 - **Progress Tracking**: Visual progress bar and word counter show your position
 
 ### Controls & Navigation
 - **Playback Controls**: Play, pause, previous word, next word
-- **Speed Adjustment**: Slider and numeric input with 25 WPM increments
+- **Pace Adjustment**: Slider and numeric input with 25 WPM increments
 - **Progress Bar**: Click anywhere to jump to that position in the document
-- **Keyboard Shortcuts**: Complete keyboard control for hands-free reading
-- **Speed Warnings**: Automatic warnings when selecting speeds >300 WPM (comprehension trade-off)
+- **Keyboard Shortcuts**: Complete keyboard control for hands-free, distraction-free reading
 
 ### Position Persistence
 - **Auto-Save**: Reading position automatically saves every 5 seconds during playback
@@ -76,7 +72,7 @@ FastReader is a modern speed reading application that uses RSVP (Rapid Serial Vi
 
 ## Keyboard Shortcuts
 
-FastReader is fully keyboard-accessible for hands-free reading:
+Control FastReader without touching your mouse—keep your hands in position and stay focused:
 
 | Key | Action |
 |-----|--------|
@@ -94,44 +90,6 @@ When the progress bar is focused (click or tab to it):
 - **Left/Right Arrows**: Navigate word by word
 - **Home/End**: Jump to beginning/end
 - **Click**: Jump to any position
-
-## Accessibility
-
-FastReader is built with accessibility as a core priority and meets **WCAG 2.1 AA** compliance standards.
-
-### Screen Reader Support
-- **Semantic HTML**: Proper use of `<button>`, `<input>`, `<nav>`, and landmark elements
-- **ARIA Labels**: All controls have descriptive labels for screen readers
-- **Live Regions**: RSVP word changes are announced to screen readers (`aria-live="polite"`)
-- **Modal Dialogs**: Speed warning modal has proper `aria-modal`, `aria-labelledby`, and `aria-describedby`
-- **Focus Management**: Focus trap in modals prevents navigation outside dialog
-
-### Keyboard Navigation
-- **Full Keyboard Access**: All features accessible via keyboard
-- **Logical Tab Order**: Controls follow a natural reading flow
-- **Visible Focus Indicators**: Clear 2px outline on all focused elements
-- **Focus Trap**: Modals trap focus until dismissed
-- **No Keyboard Traps**: Users can always exit any component
-
-### Visual Accessibility
-- **High Contrast**: All text meets WCAG AA contrast ratios (4.5:1 minimum)
-  - Primary text (#f5f5f5 on #1a1a1a): 15:1 ratio (AAA)
-  - Secondary text (#b0b0b0 on #1a1a1a): 7.7:1 ratio (AA)
-  - OVP red (#ff0000 on #1a1a1a): 5.25:1 ratio (AA)
-- **Touch Targets**: All interactive elements meet 44×44px minimum size
-- **Reduced Motion**: Respects `prefers-reduced-motion` system setting
-- **High Contrast Mode**: Supports Windows high contrast mode
-
-### Responsive Design
-- **Mobile-Friendly**: Optimized for phones, tablets, and desktop
-- **Touch Support**: Large touch targets and drag-and-drop file upload
-- **Adaptive Layout**: Controls positioned to avoid overlap with reading area
-- **Font Scaling**: Supports browser font size preferences
-
-### Accessibility Testing
-- **Automated Testing**: 48 automated accessibility tests using axe-core
-- **WCAG Validation**: All WCAG 2.1 AA violations resolved
-- **Test Coverage**: Components tested for ARIA attributes, keyboard navigation, color contrast, and form accessibility
 
 ## Getting Started
 
@@ -170,15 +128,16 @@ npm run preview
    - Or click to browse and select a file
    - Maximum file size: 50 MB
 
-2. **Adjust Speed**
-   - Use the slider or numeric input to set your reading speed
-   - Start with 200-250 WPM if you're new to speed reading
-   - Adjust up or down based on comfort and comprehension
+2. **Adjust Your Pace**
+   - Use the slider or numeric input to set your reading pace (50-350 WPM)
+   - Start with 200-250 WPM and adjust to match your natural reading rhythm
+   - Find the pace where you can focus on each word without distraction
 
-3. **Start Reading**
-   - Press Play (or Space bar) to begin
+3. **Lock In**
+   - Press Play (or Space bar) to begin your focused reading session
    - Words will appear one at a time with the optimal viewing position highlighted in red
-   - Use Left/Right arrows to navigate, Up/Down to adjust speed
+   - Your eyes stay fixed on the center—no jumping, no wandering, just focus
+   - Use Left/Right arrows to navigate, Up/Down to adjust pace
 
 4. **Take Breaks**
    - Press Pause (or Space bar) to stop
@@ -189,27 +148,19 @@ npm run preview
    - Close the document or browser tab
    - Reopen the same file later to resume from where you left off
 
-## Scientific Background
+## The Technology
 
-### Speed Reading Limits
-**IMPORTANT**: FastReader enforces a maximum speed of **350 WPM** based on scientific research showing that comprehension degrades significantly above this speed. The app displays warnings when speeds exceed 300 WPM.
-
-### RSVP Technology
-Rapid Serial Visual Presentation eliminates eye movements (saccades) by presenting words at a fixed position. This removes the ~10% of reading time spent on eye movement but also eliminates beneficial processes like re-reading and parafoveal preview.
+### RSVP (Rapid Serial Visual Presentation)
+FastReader uses RSVP technology to eliminate the need for your eyes to jump around the page. Words appear one at a time at a fixed position, letting you focus entirely on the current word without the distraction of surrounding text or the strain of constant eye movement.
 
 ### OVP (Optimal Viewing Position)
-Research shows that readers recognize words faster when fixating on a position approximately 30-35% into the word from the beginning. FastReader highlights this position in red to guide optimal eye fixation.
+Research shows that readers recognize words most efficiently when focusing on a position approximately 30-35% into the word. FastReader highlights this position in red, providing a consistent focal point that reduces eye strain and helps maintain concentration throughout your reading session.
 
-### Best Use Cases
-- Skimming emails and routine documents
-- Initial review before deep reading
-- Re-reading familiar material
-- High-volume, low-complexity content
-
-### Not Recommended For
-- Academic study materials requiring retention
-- Complex technical documentation
-- Materials requiring deep comprehension
+### Benefits of Fixed-Position Reading
+- **Reduced Eye Strain**: No constant scanning or refocusing
+- **Increased Focus**: Only one word visible at a time eliminates distractions
+- **Consistent Pace**: Set your rhythm and maintain it without effort
+- **Better Concentration**: Your brain can focus on comprehension rather than navigation
 
 ## Development
 
@@ -268,7 +219,6 @@ npm run validate
 ### Test Coverage
 - **594 tests** across 28 test files (all passing)
 - Comprehensive unit tests for all utilities and components
-- 48 automated accessibility tests using axe-core
 - Integration tests for file parsing and playback
 
 ## Browser Support
@@ -307,11 +257,11 @@ npm run build     # Verify production build
 
 ## License
 
-This project is built for educational purposes to demonstrate modern web development with React, TypeScript, and accessibility best practices.
+This project is built for educational purposes to demonstrate modern web development with React, TypeScript, and focused user experiences.
 
 ## Credits
 
-Based on scientific research in speed reading and RSVP technology. OVP calculation methodology derived from cognitive psychology research on optimal word recognition positions.
+Based on scientific research in RSVP technology and cognitive psychology. OVP calculation methodology derived from research on optimal word recognition positions and focused reading techniques.
 
 ---
 
