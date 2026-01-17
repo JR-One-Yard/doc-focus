@@ -1,5 +1,13 @@
 # FastReader - Focused Reading, One Word at a Time
 
+## TL;DR
+
+- **Upload any document** (TXT, PDF, EPUB, DOCX) and read it word-by-word with zero distractions
+- **Lock in and focus** — words appear one at a time at a fixed position, eliminating page jumping and eye strain
+- **Red OVP highlighting** marks the optimal focal point in each word for consistent eye positioning
+- **Adjust your pace** from 50-350 WPM to match your natural reading rhythm
+- **Resume anywhere** — your reading position auto-saves and persists across sessions
+
 ## Overview
 
 **FastReader** is a focused, distraction-free reading application that helps you lock in and commit to reading word by word. In a world full of distractions, endless scrolling, and eye strain from jumping across pages, FastReader lets you upload any document and read it with complete focus—one word at a time.
@@ -36,14 +44,37 @@ FastReader is designed for anyone who wants to commit to focused, distraction-fr
 
 ### Development Approach
 
-FastReader was built using a unique **autonomous AI-driven development workflow** called **Ralph Wiggum**, which emphasizes:
+FastReader was built using the **Ralph Wiggum** autonomous development methodology—an AI-driven workflow that dramatically reduces development costs while maintaining high code quality.
 
-- **Scientific rigor**: Features grounded in cognitive psychology research
-- **User-focused design**: Clean, distraction-free interface with minimal UI
-- **Comprehensive testing**: 594+ tests ensuring reliability and correctness
-- **Iterative refinement**: Continuous improvement through user testing and feedback
+#### What is Ralph Wiggum?
 
-The entire codebase was developed using Claude Code with systematic planning, implementation, and validation phases documented in `IMPLEMENTATION_PLAN.md`. This approach enabled rapid development while maintaining high code quality and comprehensive test coverage.
+Named after the persistent Simpsons character, Ralph Wiggum is a development technique built around a simple concept: **keep feeding an AI agent a task until the job is done**. At its core, it's elegantly simple—a bash loop that repeatedly feeds prompts to an AI agent, allowing it to iteratively improve its work until completion.
+
+The philosophy embodies **persistent iteration despite setbacks**—each loop learns from the previous one, gradually building toward the goal without human intervention.
+
+#### The Structure
+
+Ralph Wiggum operates as a **3-phase funnel with 2 prompts and 1 loop**:
+
+1. **Plan Mode**: The AI agent reads requirements and creates a detailed implementation plan
+2. **Build Mode**: The AI agent executes the plan, writing code, tests, and documentation
+3. **Iterate**: The loop continues, with each iteration pushing changes and refining the work
+
+The technique uses two key files:
+- `PROMPT_plan.md` — Instructions for planning phase
+- `PROMPT_build.md` — Instructions for building phase
+
+A simple `loop.sh` script orchestrates everything, running the AI agent autonomously with `--dangerously-skip-permissions` to bypass approval prompts and enable true continuous iteration.
+
+#### Why Ralph Wiggum?
+
+- **Rapid development**: Build complete features in hours instead of days
+- **Systematic approach**: Clear separation between planning and execution
+- **Autonomous iteration**: No constant human supervision required—just let it run
+- **Version control**: Each iteration automatically commits and pushes changes
+- **Reproducible**: Same prompts + same requirements = consistent results
+
+The original methodology was developed by [Geoffrey Huntley](https://github.com/ghuntley/how-to-ralph-wiggum), demonstrating that well-structured AI workflows can reduce software development costs dramatically while maintaining quality through comprehensive testing and systematic iteration.
 
 ---
 
